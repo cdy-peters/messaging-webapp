@@ -6,14 +6,14 @@ const router = express.Router();
 router.route('/register').post(async (req, res) => {
     const { username, email, password } = req.body;
 
-    const email_existence = await db.getDb().collection('users').findOne({ email })
-    const username_existence = await db.getDb().collection('users').findOne({ username })
+    const email_existence = await db.getDb().collection('users').findOne({ email }) ? true : false;
+    const username_existence = await db.getDb().collection('users').findOne({ username }) ? true : false;
 
     if (email_existence || username_existence) {
         console.log('Email or username taken')
         res.send({
-            email: email_existence,
-            username: username_existence,
+            email_existence: email_existence,
+            username_existence: username_existence,
         });
     } else {
         db.getDb().collection('users').insertOne({
@@ -23,7 +23,10 @@ router.route('/register').post(async (req, res) => {
         }, (err, result) => {
             if (err) throw err
             console.log(result)
-            res.send('User created successfully')
+            res.send({
+                email_existence: false,
+                username_existence: false,
+            })
         });
     }
 })
