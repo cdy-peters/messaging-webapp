@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const db = require('../db/conn');
 
 const router = express.Router();
@@ -10,16 +11,18 @@ router.route('/register').post(async (req, res) => {
     const username_existence = await db.getDb().collection('users').findOne({ username }) ? true : false;
 
     if (email_existence || username_existence) {
-        console.log('Email or username taken')
         res.send({
             email_existence: email_existence,
             username_existence: username_existence,
         });
     } else {
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(password, salt);
+
         db.getDb().collection('users').insertOne({
             username,
             email,
-            password
+            hash,
         }, (err, result) => {
             if (err) throw err
             console.log(result)
@@ -41,7 +44,7 @@ router.route('/login').post((req, res) => {
 
         if (!user) {
             res.json({msg: 'User does not exist'})
-        } else if (user.password !== password) {
+        } else if (!bcrypt.compareSync(password, user.hash)) {
             res.json({msg: 'Password is incorrect'})
         } else {
             res.json({msg: 'User logged in'})
