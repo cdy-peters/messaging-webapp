@@ -40,13 +40,12 @@ router.route('/login').post((req, res) => {
         if (err) throw err
 
         if (!user) {
-            console.log('User does not exist')
+            res.json({msg: 'User does not exist'})
         } else if (user.password !== password) {
-            console.log('Password is incorrect')
+            res.json({msg: 'Password is incorrect'})
         } else {
-            console.log('User logged in successfully')
+            res.json({msg: 'User logged in'})
         }
-        res.send('User logged in successfully')
     });
 })
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import $ from 'jquery';
 
 export default function Login() {
     const [form, setForm] = useState({
@@ -9,6 +10,14 @@ export default function Login() {
     const navigate = useNavigate()
 
     function updateForm(value) {
+        // Clear any field errors on change
+        if ('username' in value) {
+            $('#l_username > p').attr('hidden', true);
+        }
+        if ('password' in value) {
+            $('#l_password > p').attr('hidden', true);
+        }
+
         return setForm((prev) => {
             return {
                 ...prev,
@@ -17,24 +26,56 @@ export default function Login() {
         })
     }
 
+    function validate_fields() {
+        var valid = true;
+
+        if (form.username === '') {
+            $('#l_username > p').text('Please enter a username').attr('hidden', false);
+            valid = false
+        }
+
+        if (form.password === '') {
+            $('#l_password > p').text('Please enter a password').attr('hidden', false);
+            valid = false
+        }
+
+        return valid
+    }
+
     async function onSubmit(e) {
         e.preventDefault();
         
         const user = { ...form };
 
-        await fetch("http://localhost:5000/login", {
+        if (!validate_fields()) {
+            console.log('Invalid form')
+            return
+        }
+
+        fetch("http://localhost:5000/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(user)
         })
+        .then(response => response.json())
+        .then(data => {
+            if (data.msg === 'User does not exist') {
+                $('#l_username > p').text('User does not exist').attr('hidden', false);
+            }
+            if (data.msg === 'Password is incorrect') {
+                $('#l_password > p').text('Incorrect password').attr('hidden', false);
+            }
+            if (data.msg === 'User logged in') {
+                console.log('Successfully logged in')
+            }
+        })
         .catch(err => {
             console.error(err);
             return
         })
 
-        setForm({ username: '', password: '' });
         navigate('/login')
     }
 
@@ -42,10 +83,18 @@ export default function Login() {
         <div>
             <h3>Login</h3>
             <form onSubmit={onSubmit}>
-                <label>Username:</label>
-                <input type="text" value={form.username} onChange={(e) => updateForm({ username: e.target.value })} />
-                <label>Password:</label>
-                <input type="password" value={form.password} onChange={(e) => updateForm({ password: e.target.value })} />
+                <div id='l_username'>
+                    <label>Username:</label>
+                    <input type="text" value={form.username} onChange={(e) => updateForm({ username: e.target.value })} />
+                    <p className='field_error' hidden></p>
+                </div>
+
+                <div id='l_password'>
+                    <label>Password:</label>
+                    <input type="password" value={form.password} onChange={(e) => updateForm({ password: e.target.value })} />
+                    <p className='field_error' hidden></p>
+                </div>
+
                 <button type="submit">Login</button>
             </form>
         </div>

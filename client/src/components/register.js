@@ -97,14 +97,14 @@ export default function Register() {
             body: JSON.stringify(newUser)
         })
         .then(response => response.json())
-        .then(json => {
-            if (json.email_existence) {
+        .then(data => {
+            if (data.email_existence) {
                 $('#r_email > p').text('Email already in use').attr('hidden', false);
             }
-            if (json.username_existence) {
+            if (data.username_existence) {
                 $('#r_username > p').text('Username taken').attr('hidden', false);
             }
-            if (!json.email_existence && !json.username_existence) {
+            if (!data.email_existence && !data.username_existence) {
                 console.log('Successfully registered')
             }
         })
