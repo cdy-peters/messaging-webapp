@@ -113,13 +113,13 @@ export default function Register() {
             return
         })
 
-        navigate('/register')
+        navigate('/')
     }
 
     return (
         <div>
             <h3>Register</h3>
-            <form onSubmit={onSubmit}>
+            <form className='form' id='register_form' onSubmit={onSubmit}>
                 <div id='r_email'>
                     <label>Email:</label>
                     <input type="text" value={form.email} onChange={(e) => updateForm({ email: e.target.value })} />

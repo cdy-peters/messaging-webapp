@@ -76,13 +76,13 @@ export default function Login() {
             return
         })
 
-        navigate('/login')
+        navigate('/')
     }
 
     return (
         <div>
             <h3>Login</h3>
-            <form onSubmit={onSubmit}>
+            <form className='form' id='login_form' onSubmit={onSubmit}>
                 <div id='l_username'>
                     <label>Username:</label>
                     <input type="text" value={form.username} onChange={(e) => updateForm({ username: e.target.value })} />
