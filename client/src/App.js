@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import useToken from './utils/useToken';
 
-import Entry from './components/entry';
+import Entry from './components/Entry/entry';
 import Home from './components/home';
 
 const App = () => {
