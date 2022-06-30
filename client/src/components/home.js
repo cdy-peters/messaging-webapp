@@ -7,11 +7,10 @@ export default function Home() {
         <div>
             <Messages />
 
-            {/* <h1>Home</h1>
             <button onClick={() => {
                 localStorage.removeItem('token');
                 window.location.reload();
-            }}>Logout</button> */}
+            }}>Logout</button>
         </div>
     );
 }
