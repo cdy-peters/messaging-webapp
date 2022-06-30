@@ -30,8 +30,7 @@ router.post("/register", async (req, res) => {
       .save()
       .then((user) => {
         res.json({
-          email_existence: false,
-          username_existence: false,
+          token: user._id.toString(),
         });
       })
       .catch((err) => {
@@ -46,12 +45,22 @@ router.post("/login", (req, res) => {
   User.findOne({ username }, (err, user) => {
     if (err) throw err;
 
-    if (!user) {
-      res.json({ msg: "User does not exist" });
-    } else if (!bcrypt.compareSync(password, user.password)) {
-      res.json({ msg: "Password is incorrect" });
+    if (user) {
+      bcrypt.compare(password, user.password, (err, result) => {
+        if (result) {
+          res.json({
+            token: user._id.toString(),
+          });
+        } else {
+          res.json({
+            error: "invalid_password",
+          });
+        }
+      });
     } else {
-      res.json({ msg: "User logged in" });
+      res.json({
+        error: "invalid_user",
+      });
     }
   });
 });

@@ -7,7 +7,7 @@ var email_regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(
 var username_regex = /^[a-zA-Z0-9_-]{3,20}$/;
 var password_regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
 
-export default function Register() {
+export default function Register({ setToken }) {
     const [form, setForm] = useState({
         email: '',
         username: '',
@@ -98,15 +98,18 @@ export default function Register() {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.email_existence) {
-                $('#r_email > p').text('Email already in use').attr('hidden', false);
+            if ('token' in data) {
+                setToken(data.token);
+                navigate('/');
+            } else {
+                if (data.email_existence) {
+                    $('#r_email > p').text('Email already in use').attr('hidden', false);
+                }
+                if (data.username_existence) {
+                    $('#r_username > p').text('Username taken').attr('hidden', false);
+                }
             }
-            if (data.username_existence) {
-                $('#r_username > p').text('Username taken').attr('hidden', false);
-            }
-            if (!data.email_existence && !data.username_existence) {
-                console.log('Successfully registered')
-            }
+
         })
         .catch(err => {
             console.error(err);

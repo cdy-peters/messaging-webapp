@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import $ from 'jquery';
 
-export default function Login() {
+export default function Login({ setToken }) {
     const [form, setForm] = useState({
         username: '',
         password: ''
@@ -61,14 +61,20 @@ export default function Login() {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.msg === 'User does not exist') {
-                $('#l_username > p').text('User does not exist').attr('hidden', false);
-            }
-            if (data.msg === 'Password is incorrect') {
-                $('#l_password > p').text('Incorrect password').attr('hidden', false);
-            }
-            if (data.msg === 'User logged in') {
-                console.log('Successfully logged in')
+            if ('token' in data) {
+                setToken(data.token);
+                navigate('/');
+            } else {
+                switch (data.error) {
+                    case 'invalid_user':
+                        $('#l_username > p').text('User does not exist').attr('hidden', false);
+                        break;
+                    case 'invalid_password':
+                        $('#l_password > p').text('Incorrect password').attr('hidden', false);
+                        break;
+                    default:
+                        console.log('Unknown error')
+                }
             }
         })
         .catch(err => {
