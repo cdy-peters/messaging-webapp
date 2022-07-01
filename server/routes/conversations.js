@@ -1,107 +1,85 @@
-const express = require('express')
-const mongoose = require('mongoose')
+const express = require("express");
+const mongoose = require("mongoose");
 
-const router = express.Router()
+const router = express.Router();
 
-const User = require('../models/User')
-const Conversations = require('../models/Conversations')
+const User = require("../models/User");
+const Conversations = require("../models/Conversations");
 
-router.post('/get_conversations', (req, res) => {
-    const { userId } = req.body
+router.post("/get_conversations", (req, res) => {
+  const { userId } = req.body;
 
-    Conversations.find({ recipients: userId }, (err, conversations) => {
-        if (err) throw err
+  Conversations.find({ recipients: userId }, (err, conversations) => {
+    if (err) throw err;
 
-        res.json(conversations)
-    }
-    )
-})
-
-router.post('/get_users', (req, res) => {
-    const { userId } = req.body
-    
-    User.find({ _id: { $ne: userId } }, (err, users) => {
-        if (err) throw err
-
-        res.json(users)
-    })
-})
-
-router.post('/get_messages', (req, res) => {
-    const { conversationId, recipientId } = req.body
-    
-    Conversations.findOne({ _id: conversationId }, (err, conversation) => {
-        if (err) throw err
-
-        res.json(conversation.messages)
-    })
+    res.json(conversations);
+  });
 });
 
-router.post('/send_message', (req, res) => {
-    const { conversationId, recipientId, senderId, message } = req.body;
+router.post("/get_users", (req, res) => {
+  const { userId } = req.body;
 
-    console.log(req.body)
+  User.find({ _id: { $ne: userId } }, (err, users) => {
+    if (err) throw err;
 
-    if (conversationId) {
-        Conversations.findOneAndUpdate({ _id: conversationId }, { $push: { messages: { sender: senderId, message: message } } }, (err, conversation) => {
-            if (err) throw err
-
-            res.json(conversation)
-        }
-        )
-    } else {
-        const newConversation = new Conversations({
-            recipients: [recipientId, senderId],
-            messages: [{ sender: senderId, message: message }]
-        })
-
-        newConversation.save((err, conversation) => {
-            if (err) throw err
-
-            res.json(conversation)
-        }
-        )
-    }
-
-    // Conversations.findByIdAndUpdate(conversationId, {
-    //     $push: {
-    //         messages: {
-    //             sender: senderId,
-    //             message: message
-    //         }
-    //     }
-    // }, { new: true }, (err, conversation) => {
-    //     if (err) {
-    //         console.log(err);
-    //         res.status(500).send(err);
-    //     } else {
-    //         res.status(200).send(conversation);
-    //     }
-    // });
-
-
-
-    // const newMessage = new Conversations({
-    //     recipients: [recipientId, senderId],
-    //     messages: [
-    //         {
-    //             sender: senderId,
-    //             message: message,
-    //         },
-    //     ],
-    // });
-
-    // newMessage
-    //     .save()
-    //     .then(message => {
-    //         // req.io.sockets.emit('message', message);
-    //         res.json(message);
-    //     })
-    //     .catch(err => {
-    //         res.send(err);
-    //     });
-
-
+    res.json(users);
+  });
 });
 
-module.exports = router
+router.post("/get_messages", (req, res) => {
+  const { conversationId, recipientId } = req.body;
+
+  Conversations.findOne({ _id: conversationId }, (err, conversation) => {
+    if (err) throw err;
+
+    res.json(conversation.messages);
+  });
+});
+
+router.post("/send_message", (req, res) => {
+  const { conversationId, recipientId, senderId, message } = req.body;
+
+  console.log(req.body);
+
+  if (conversationId) {
+    Conversations.findOneAndUpdate(
+      { _id: conversationId },
+      { $push: { messages: { sender: senderId, message: message } } },
+      { new: true },
+      (err, conversation) => {
+        if (err) throw err;
+
+        const lastMessageId =
+          conversation.messages[conversation.messages.length - 1]._id;
+        req.io.sockets.emit("message", {
+          _id: lastMessageId,
+          sender: senderId,
+          message: message,
+        });
+
+        res.json(conversation);
+      }
+    );
+  } else {
+    const newConversation = new Conversations({
+      recipients: [recipientId, senderId],
+      messages: [{ sender: senderId, message: message }],
+    });
+
+    newConversation.save((err, conversation) => {
+      if (err) throw err;
+
+      const lastMessageId =
+        conversation.messages[conversation.messages.length - 1]._id;
+      req.io.sockets.emit("message", {
+        _id: lastMessageId,
+        sender: senderId,
+        message: message,
+      });
+
+      res.json(conversation);
+    });
+  }
+});
+
+module.exports = router;
