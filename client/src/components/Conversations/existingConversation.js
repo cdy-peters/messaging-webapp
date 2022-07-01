@@ -41,7 +41,7 @@ const ExistingConversations = (props) => {
           value={conversation._id}
           onClick={handleClick}
         >
-          {conversation.recipients[0]}
+          {conversation._id}
         </button>
       ))}
     </div>
