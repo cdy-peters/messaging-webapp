@@ -4,12 +4,17 @@ const mongoose = require('mongoose')
 const router = express.Router()
 
 const User = require('../models/User')
+const Conversations = require('../models/Conversations')
 
-router.get('/conversations', (req, res) => {
-    User.find({}, (err, users) => {
+router.post('/conversations', (req, res) => {
+    const { userId } = req.body
+
+    Conversations.find({ recipients: userId }, (err, conversations) => {
         if (err) throw err
-        res.json(users)
-    })
+
+        res.json(conversations)
+    }
+    )
 })
 
 module.exports = router

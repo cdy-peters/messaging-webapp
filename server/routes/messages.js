@@ -6,29 +6,48 @@ const Conversations = require('../models/Conversations');
 const router = express.Router();
 
 router.post('/messages', (req, res) => {
-    const { recipient, sender, message } = req.body;
+    const { conversationId, senderId, message } = req.body;
 
-    console.log(recipient, sender);
+    console.log(req.body);
 
-    const newMessage = new Conversations({
-        recipients: [recipient, sender],
-        messages: [
-            {
-                sender: sender,
-                message: message,
-            },
-        ],
+    // Add message to conversation
+    Conversations.findByIdAndUpdate(conversationId, {
+        $push: {
+            messages: {
+                sender: senderId,
+                message: message
+            }
+        }
+    }, { new: true }, (err, conversation) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send(err);
+        } else {
+            res.status(200).send(conversation);
+        }
     });
 
-    newMessage
-        .save()
-        .then(message => {
-            // req.io.sockets.emit('message', message);
-            res.json(message);
-        })
-        .catch(err => {
-            res.send(err);
-        });
+
+
+    // const newMessage = new Conversations({
+    //     recipients: [recipientId, senderId],
+    //     messages: [
+    //         {
+    //             sender: senderId,
+    //             message: message,
+    //         },
+    //     ],
+    // });
+
+    // newMessage
+    //     .save()
+    //     .then(message => {
+    //         // req.io.sockets.emit('message', message);
+    //         res.json(message);
+    //     })
+    //     .catch(err => {
+    //         res.send(err);
+    //     });
 
 
 });

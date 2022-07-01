@@ -4,15 +4,15 @@ import MessageHistory from './messageHistory';
 import MessageField from './messageField';
 
 const Messages = (props) => {
-    const recipient = props.recipient
+    const conversationId = props.conversationId;
 
     return (
         <div>
             <h1>Messages</h1>
-            <p>To: {recipient}</p>
+            <p>To: {conversationId}</p>
             <p>From: {localStorage.getItem('token')}</p>
             <MessageHistory />
-            <MessageField recipient={recipient} />
+            <MessageField conversationId={conversationId} />
         </div>
     );
 }

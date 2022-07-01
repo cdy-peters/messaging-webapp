@@ -13,8 +13,8 @@ const MessageField = (props) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                recipient: props.recipient,
-                sender: localStorage.getItem('token'),
+                conversationId: props.conversationId,
+                senderId: localStorage.getItem('token'),
                 message: newMessage
             })
         })
