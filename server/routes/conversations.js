@@ -27,6 +27,16 @@ router.post('/get_users', (req, res) => {
     })
 })
 
+router.post('/get_messages', (req, res) => {
+    const { conversationId, recipientId } = req.body
+    
+    Conversations.findOne({ _id: conversationId }, (err, conversation) => {
+        if (err) throw err
+
+        res.json(conversation.messages)
+    })
+});
+
 router.post('/send_message', (req, res) => {
     const { conversationId, recipientId, senderId, message } = req.body;
 

@@ -12,34 +12,37 @@ const Conversations = () => {
   const [selectedUser, setSelectedUser] = useState(null);
 
   return (
-    <div>
-      <h1>Conversations</h1>
-      <ExistingConversation
-        conversations={conversations}
-        setConversations={setConversations}
-        setSelectedConversation={setSelectedConversation}
-        setSelectedUser={setSelectedUser}
-      />
-      <NewConversation
-        users={users}
-        setUsers={setUsers}
-        setSelectedUser={setSelectedUser}
-        setSelectedConversation={setSelectedConversation}
-      />
-
-      {selectedConversation && (
-        <Messages
-          conversationId={selectedConversation}
-          recipientId={selectedUser}
+    <div className="display-flex">
+      <div>
+        <ExistingConversation
+          conversations={conversations}
+          setConversations={setConversations}
+          setSelectedConversation={setSelectedConversation}
+          setSelectedUser={setSelectedUser}
         />
-      )}
-
-      {selectedUser && (
-        <Messages
-          conversationId={selectedConversation}
-          recipientId={selectedUser}
+        <NewConversation
+          users={users}
+          setUsers={setUsers}
+          setSelectedUser={setSelectedUser}
+          setSelectedConversation={setSelectedConversation}
         />
-      )}
+      </div>
+
+      <div>
+        {selectedConversation && (
+          <Messages
+            conversationId={selectedConversation}
+            recipientId={selectedUser}
+          />
+        )}
+
+        {selectedUser && (
+          <Messages
+            conversationId={selectedConversation}
+            recipientId={selectedUser}
+          />
+        )}
+      </div>
     </div>
   );
 };

@@ -9,10 +9,8 @@ const Messages = (props) => {
 
     return (
         <div>
-            <h1>Messages</h1>
-            <p>To: {conversationId || recipientId}</p>
-            <p>From: {localStorage.getItem('token')}</p>
-            <MessageHistory />
+            <h1>{conversationId || recipientId}</h1>
+            <MessageHistory conversationId={conversationId} />
             <MessageField conversationId={conversationId} recipientId={recipientId} />
         </div>
     );
