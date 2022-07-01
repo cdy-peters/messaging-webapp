@@ -14,7 +14,7 @@ const Conversations = () => {
         async function getConversations() {
             const response = await fetch('http://localhost:5000/conversations');
             const data = await response.json();
-            console.log(data);
+
             setConversations(data);
         }
         getConversations();

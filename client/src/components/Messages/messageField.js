@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 
-const MessageField = () => {
+const MessageField = (props) => {
     const [newMessage, setNewMessage] = useState('');
 
     const handleSubmit = (e) => {
@@ -13,6 +13,8 @@ const MessageField = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                recipient: props.recipient,
+                sender: localStorage.getItem('token'),
                 message: newMessage
             })
         })

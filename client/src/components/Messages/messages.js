@@ -3,14 +3,16 @@ import React from 'react';
 import MessageHistory from './messageHistory';
 import MessageField from './messageField';
 
-const Messages = (recipient) => {
+const Messages = (props) => {
+    const recipient = props.recipient
+
     return (
         <div>
             <h1>Messages</h1>
-            <p>To: {recipient.recipient}</p>
+            <p>To: {recipient}</p>
             <p>From: {localStorage.getItem('token')}</p>
             <MessageHistory />
-            <MessageField />
+            <MessageField recipient={recipient} />
         </div>
     );
 }
