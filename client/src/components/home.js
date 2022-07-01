@@ -1,11 +1,11 @@
 import React from 'react';
 
-import Messages from './Messages/messages';
+import Conversations from './Conversations/conversations';
 
 export default function Home() {
     return (
         <div>
-            <Messages />
+            <Conversations />
 
             <button onClick={() => {
                 localStorage.removeItem('token');
