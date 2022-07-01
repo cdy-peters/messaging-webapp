@@ -36,4 +36,3 @@ app.use((req, res, next) => {
 
 app.use(require("./routes/entry"));
 app.use(require("./routes/conversations"));
-app.use(require("./routes/messages"));

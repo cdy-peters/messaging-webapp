@@ -7,13 +7,14 @@ const MessageField = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        fetch('http://localhost:5000/messages', {
+        fetch('http://localhost:5000/send_message', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 conversationId: props.conversationId,
+                recipientId: props.recipientId,
                 senderId: localStorage.getItem('token'),
                 message: newMessage
             })
