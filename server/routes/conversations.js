@@ -27,7 +27,7 @@ router.post("/get_users", (req, res) => {
 });
 
 router.post("/get_messages", (req, res) => {
-  const { conversationId, recipientId } = req.body;
+  const { conversationId } = req.body;
 
   Conversations.findOne({ _id: conversationId }, (err, conversation) => {
     if (err) throw err;
@@ -36,37 +36,31 @@ router.post("/get_messages", (req, res) => {
   });
 });
 
+router.post("/new_conversation", (req, res) => {
+  const { userId, recipientId } = req.body;
+
+  const newConversation = new Conversations({
+    recipients: [userId, recipientId],
+    messages: [],
+  });
+
+  newConversation.save((err, conversation) => {
+    if (err) throw err;
+
+    res.json(conversation);
+  });
+});
+
 router.post("/send_message", (req, res) => {
-  const { conversationId, recipientId, senderId, message } = req.body;
+  const { conversationId, senderId, message } = req.body;
 
   console.log(req.body);
 
-  if (conversationId) {
-    Conversations.findOneAndUpdate(
-      { _id: conversationId },
-      { $push: { messages: { sender: senderId, message: message } } },
-      { new: true },
-      (err, conversation) => {
-        if (err) throw err;
-
-        const lastMessageId =
-          conversation.messages[conversation.messages.length - 1]._id;
-        req.io.sockets.emit("message", {
-          _id: lastMessageId,
-          sender: senderId,
-          message: message,
-        });
-
-        res.json(conversation);
-      }
-    );
-  } else {
-    const newConversation = new Conversations({
-      recipients: [recipientId, senderId],
-      messages: [{ sender: senderId, message: message }],
-    });
-
-    newConversation.save((err, conversation) => {
+  Conversations.findOneAndUpdate(
+    { _id: conversationId },
+    { $push: { messages: { sender: senderId, message: message } } },
+    { new: true },
+    (err, conversation) => {
       if (err) throw err;
 
       const lastMessageId =
@@ -78,8 +72,8 @@ router.post("/send_message", (req, res) => {
       });
 
       res.json(conversation);
-    });
-  }
+    }
+  );
 });
 
 module.exports = router;

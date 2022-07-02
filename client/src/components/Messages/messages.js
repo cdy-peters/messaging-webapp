@@ -4,14 +4,13 @@ import MessageHistory from './messageHistory';
 import MessageField from './messageField';
 
 const Messages = (props) => {
-    const conversationId = props.conversationId || null;
-    const recipientId = props.recipientId || null;
+    const conversationId = props.conversationId;
 
     return (
         <div>
-            <h1>{conversationId || recipientId}</h1>
+            <h1>{conversationId}</h1>
             <MessageHistory conversationId={conversationId} />
-            <MessageField conversationId={conversationId} recipientId={recipientId} />
+            <MessageField conversationId={conversationId} />
         </div>
     );
 }

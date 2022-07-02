@@ -1,16 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const ExistingConversations = (props) => {
-  const {
-    conversations,
-    setConversations,
-    setSelectedConversation,
-    setSelectedUser,
-  } = props;
+  const [conversations, setConversations] = useState([]);
+
+  const { setSelectedConversation } = props;
 
   const handleClick = (e) => {
     setSelectedConversation(e.target.value);
-    setSelectedUser(null);
   };
 
   useEffect(() => {

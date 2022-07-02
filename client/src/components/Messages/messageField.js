@@ -14,7 +14,6 @@ const MessageField = (props) => {
             },
             body: JSON.stringify({
                 conversationId: props.conversationId,
-                recipientId: props.recipientId,
                 senderId: localStorage.getItem('token'),
                 message: newMessage
             })

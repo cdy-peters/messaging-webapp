@@ -4,25 +4,23 @@ import socketIOClient from "socket.io-client";
 const MessageHistory = (props) => {
   const [messages, setMessages] = useState([]);
 
-  if (props.conversationId) {
-    useEffect(() => {
-      async function getMessages() {
-        const response = await fetch("http://localhost:5000/get_messages", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            conversationId: props.conversationId,
-          }),
-        });
-        const data = await response.json();
+  useEffect(() => {
+    async function getMessages() {
+      const response = await fetch("http://localhost:5000/get_messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          conversationId: props.conversationId,
+        }),
+      });
+      const data = await response.json();
 
-        setMessages(data);
-      }
-      getMessages();
-    }, [props.conversationId]);
-  }
+      setMessages(data);
+    }
+    getMessages();
+  }, [props.conversationId]);
 
   useEffect(() => {
     const socket = socketIOClient("http://localhost:5000");

@@ -1,16 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const NewConversations = (props) => {
-  const {
-    users,
-    setUsers,
-    setSelectedUser,
-    setSelectedConversation,
-  } = props;
+  const [users, setUsers] = useState([]);
+
+  const { setSelectedConversation } = props;
 
   const handleClick = (e) => {
-    setSelectedUser(e.target.value);
-    setSelectedConversation(null);
+    fetch("http://localhost:5000/new_conversation", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: localStorage.getItem("token"),
+        recipientId: e.target.value,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setSelectedConversation(data._id);
+      });
   };
 
   useEffect(() => {
