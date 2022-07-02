@@ -8,12 +8,20 @@ const Conversations = require("../models/Conversations");
 
 router.post("/get_conversations", (req, res) => {
   const { userId } = req.body;
-
-  Conversations.find({ recipients: userId }, (err, conversations) => {
-    if (err) throw err;
-
-    res.json(conversations);
-  });
+  
+  Conversations.find({
+    recipients: userId,
+    $nor: [{ messages: { $size: 0 } }],
+  })
+    .then((conversations) => {
+      console.log(conversations)
+      res.json(conversations);
+    })
+    .catch((err) => {
+      console.log(err)
+      res.json(err);
+    }
+    );
 });
 
 router.post("/get_users", (req, res) => {
