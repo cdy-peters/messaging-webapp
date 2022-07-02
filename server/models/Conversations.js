@@ -2,7 +2,12 @@ const mongoose = require("mongoose");
 
 const conversationSchema = new mongoose.Schema(
     {
-        recipients: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+        recipients: [
+            {
+                userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+                username: String,
+            },
+        ],
         messages: [
             {
                 sender: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

@@ -8,20 +8,21 @@ const Conversations = require("../models/Conversations");
 
 router.post("/get_conversations", (req, res) => {
   const { userId } = req.body;
-  
+
   Conversations.find({
-    recipients: userId,
+    recipients: {
+      $elemMatch: {
+        userId: mongoose.Types.ObjectId(userId),
+      },
+    },
     $nor: [{ messages: { $size: 0 } }],
   })
     .then((conversations) => {
-      console.log(conversations)
       res.json(conversations);
     })
     .catch((err) => {
-      console.log(err)
       res.json(err);
-    }
-    );
+    });
 });
 
 router.post("/get_users", (req, res) => {
@@ -47,17 +48,38 @@ router.post("/get_messages", (req, res) => {
 router.post("/new_conversation", (req, res) => {
   const { userId, recipientId } = req.body;
 
-  const newConversation = new Conversations({
-    recipients: [userId, recipientId],
-    messages: [],
-  });
-
-  newConversation.save((err, conversation) => {
+  // Get usernames of recipients
+  User.find({ _id: { $in: [userId, recipientId] } }, (err, users) => {
     if (err) throw err;
 
-    res.json(conversation);
-  });
-});
+    const recipients = users.map((user) => {
+      return user.username;
+    });
+
+    // Create new conversation
+    const newConversation = new Conversations({
+      recipients: [
+        {
+          userId: userId,
+          username: recipients[0],
+        },
+        {
+          userId: recipientId,
+          username: recipients[1],
+        },
+      ],
+    });
+
+    newConversation.save((err, conversation) => {
+      if (err) throw err;
+
+      res.json(conversation);
+    }
+    );
+  }
+  );
+}
+);
 
 router.post("/send_message", (req, res) => {
   const { conversationId, senderId, message } = req.body;

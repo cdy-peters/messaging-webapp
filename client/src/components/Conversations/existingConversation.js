@@ -6,7 +6,7 @@ const ExistingConversations = (props) => {
   const { setSelectedConversation } = props;
 
   const handleClick = (e) => {
-    setSelectedConversation(e.target.value);
+    setSelectedConversation({conversationId: e.target.value, username: e.target.innerText});
   };
 
   useEffect(() => {
@@ -27,6 +27,7 @@ const ExistingConversations = (props) => {
     getConversations();
   }, []);
 
+
   return (
     <div>
       <h1>Conversations</h1>
@@ -37,7 +38,7 @@ const ExistingConversations = (props) => {
           value={conversation._id}
           onClick={handleClick}
         >
-          {conversation._id}
+          {conversation.recipients[1].username}
         </button>
       ))}
     </div>

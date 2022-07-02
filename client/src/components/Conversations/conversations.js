@@ -18,7 +18,7 @@ const Conversations = () => {
 
       <div>
         {selectedConversation && (
-          <Messages conversationId={selectedConversation} />
+          <Messages selectedConversation={selectedConversation} />
         )}
       </div>
     </div>
