@@ -55,7 +55,9 @@ router.post("/get_messages", (req, res) => {
   Conversations.findOne({ _id: conversationId }, (err, conversation) => {
     if (err) throw err;
 
-    res.json(conversation.messages);
+    const messages = conversation.messages;
+
+    res.json(messages);
   });
 });
 
@@ -85,26 +87,35 @@ router.post("/new_conversation", (req, res) => {
 router.post("/send_message", (req, res) => {
   const { conversationId, senderId, message } = req.body;
 
-  console.log(req.body);
+  User.findById(senderId, (err, user) => {
+    if (err) throw err;
 
-  Conversations.findOneAndUpdate(
-    { _id: conversationId },
-    { $push: { messages: { sender: senderId, message: message } } },
-    { new: true },
-    (err, conversation) => {
-      if (err) throw err;
+    Conversations.findByIdAndUpdate(
+      conversationId,
+      {
+        $push: {
+          messages: {
+            sender: user.username,
+            message: message,
+          },
+        },
+      },
+      { new: true },
+      (err, conversation) => {
+        if (err) throw err;
 
-      const lastMessageId =
-        conversation.messages[conversation.messages.length - 1]._id;
-      req.io.sockets.emit("message", {
-        _id: lastMessageId,
-        sender: senderId,
-        message: message,
-      });
+        const lastMessageId =
+          conversation.messages[conversation.messages.length - 1]._id;
+        req.io.sockets.emit("message", {
+          _id: lastMessageId,
+          sender: user.username,
+          message: message,
+        });
 
-      res.json(conversation);
-    }
-  );
+        res.json(conversation);
+      }
+    );
+  });
 });
 
 module.exports = router;
