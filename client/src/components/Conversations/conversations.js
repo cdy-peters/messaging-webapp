@@ -18,7 +18,10 @@ const Conversations = () => {
           setSelectedConversation={setSelectedConversation}
           search={search}
         />
-        <NewConversation setSelectedConversation={setSelectedConversation} />
+        <NewConversation
+          setSelectedConversation={setSelectedConversation}
+          search={search}
+        />
       </div>
 
       <div>

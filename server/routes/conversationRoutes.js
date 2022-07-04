@@ -18,7 +18,6 @@ router.post("/get_conversations", (req, res) => {
     $nor: [{ messages: { $size: 0 } }],
   })
     .then((conversations) => {
-      // Remove recipient that is the same as userId from each conversation
       const filteredConversations = conversations.map((conversation) => {
         const filteredRecipients = conversation.recipients.filter(
           (recipient) => recipient.userId.toString() !== userId
@@ -35,13 +34,21 @@ router.post("/get_conversations", (req, res) => {
 });
 
 router.post("/get_users", (req, res) => {
-  const { userId } = req.body;
+  const { userId, search } = req.body;
 
-  User.find({ _id: { $ne: userId } }, (err, users) => {
-    if (err) throw err;
-
-    res.json(users);
-  });
+  User.find({
+    _id: {
+      $ne: mongoose.Types.ObjectId(userId),
+    },
+    username: search
+  })
+    .then((users) => {
+      res.json(users);
+    })
+    .catch((err) => {
+      res.json(err);
+    }
+    );
 });
 
 router.post("/get_messages", (req, res) => {

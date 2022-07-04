@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 const NewConversations = (props) => {
   const [users, setUsers] = useState([]);
 
-  const { setSelectedConversation } = props;
+  const { setSelectedConversation, search } = props;
 
   const handleClick = (e) => {
     fetch("http://localhost:5000/new_conversation", {
@@ -23,22 +23,27 @@ const NewConversations = (props) => {
   };
 
   useEffect(() => {
-    async function getUsers() {
-      const response = await fetch("http://localhost:5000/get_users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: localStorage.getItem("token"),
-        }),
-      });
-      const data = await response.json();
+    if (search) {
+      async function getUsers() {
+        const response = await fetch("http://localhost:5000/get_users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: localStorage.getItem("token"),
+            search: search,
+          }),
+        });
+        const data = await response.json();
 
-      setUsers(data);
+        setUsers(data);
+      }
+      getUsers();
+    } else {
+      setUsers([]);
     }
-    getUsers();
-  }, []);
+  }, [search]);
 
   return (
     <div>

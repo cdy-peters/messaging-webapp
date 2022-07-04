@@ -30,7 +30,6 @@ const ExistingConversations = (props) => {
     getConversations();
   }, []);
 
-  // On search change, hide buttons where search is not in the username
   useEffect(() => {
     if (search) {
       // eslint-disable-next-line array-callback-return
