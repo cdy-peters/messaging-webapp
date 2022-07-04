@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 const NewConversations = (props) => {
   const [users, setUsers] = useState([]);
 
-  const { setSelectedConversation, search } = props;
+  const { conversations, setSelectedConversation, search } = props;
 
   const handleClick = (e) => {
     fetch("http://localhost:5000/new_conversation", {
@@ -18,7 +18,10 @@ const NewConversations = (props) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setSelectedConversation({ conversationId: data._id, username: e.target.innerText });
+        setSelectedConversation({
+          conversationId: data._id,
+          username: e.target.innerText,
+        });
       });
   };
 
@@ -37,7 +40,21 @@ const NewConversations = (props) => {
         });
         const data = await response.json();
 
-        setUsers(data);
+        if (data.length > 0) {
+          if (
+            conversations.some((conversation) =>
+              conversation.recipients.some(
+                (recipient) => recipient.username === search
+              )
+            )
+          ) {
+            setUsers([]);
+          } else {
+            setUsers(data);
+          }
+        } else {
+          setUsers([]);
+        }
       }
       getUsers();
     } else {

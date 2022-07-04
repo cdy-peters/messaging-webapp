@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 
 const ExistingConversations = (props) => {
-  const [conversations, setConversations] = useState([]);
   const [filteredConversations, setFilteredConversations] = useState([]);
-  const { setSelectedConversation, search } = props;
+  const {
+    conversations,
+    setConversations,
+    setSelectedConversation,
+    search,
+  } = props;
 
   const handleClick = (e) => {
     setSelectedConversation({

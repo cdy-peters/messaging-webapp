@@ -23,8 +23,7 @@ router.post("/get_conversations", (req, res) => {
           (recipient) => recipient.userId.toString() !== userId
         );
         return { ...conversation._doc, recipients: filteredRecipients };
-      }
-      );
+      });
 
       res.json(filteredConversations);
     })
@@ -34,21 +33,20 @@ router.post("/get_conversations", (req, res) => {
 });
 
 router.post("/get_users", (req, res) => {
-  const { userId, search } = req.body;
+  const { userId, search, conversations } = req.body;
 
   User.find({
     _id: {
       $ne: mongoose.Types.ObjectId(userId),
     },
-    username: search
+    username: search,
   })
     .then((users) => {
       res.json(users);
     })
     .catch((err) => {
       res.json(err);
-    }
-    );
+    });
 });
 
 router.post("/get_messages", (req, res) => {
@@ -70,7 +68,7 @@ router.post("/new_conversation", (req, res) => {
     const recipients = users.map((user) => {
       return { userId: user._id, username: user.username };
     });
-    
+
     const newConversation = new Conversations({
       recipients: recipients,
       messages: [],

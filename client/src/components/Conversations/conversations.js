@@ -7,6 +7,7 @@ import Messages from "../Messages/messages";
 
 const Conversations = () => {
   const [search, setSearch] = useState("");
+  const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
 
   return (
@@ -15,10 +16,13 @@ const Conversations = () => {
         <Search search={search} setSearch={setSearch} />
 
         <ExistingConversation
+          conversations={conversations}
+          setConversations={setConversations}
           setSelectedConversation={setSelectedConversation}
           search={search}
         />
         <NewConversation
+          conversations={conversations}
           setSelectedConversation={setSelectedConversation}
           search={search}
         />
