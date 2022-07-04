@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 
 const ExistingConversations = (props) => {
   const [conversations, setConversations] = useState([]);
-  const { setSelectedConversation } = props;
+  const [filteredConversations, setFilteredConversations] = useState([]);
+  const { setSelectedConversation, search } = props;
 
   const handleClick = (e) => {
-    setSelectedConversation({conversationId: e.target.value, username: e.target.innerText});
+    setSelectedConversation({
+      conversationId: e.target.value,
+      username: e.target.innerText,
+    });
   };
 
   useEffect(() => {
@@ -21,19 +25,35 @@ const ExistingConversations = (props) => {
       });
       const data = await response.json();
 
-      console.log(data)
-
       setConversations(data);
     }
     getConversations();
   }, []);
 
+  // On search change, hide buttons where search is not in the username
+  useEffect(() => {
+    if (search) {
+      // eslint-disable-next-line array-callback-return
+      const filtered = conversations.filter((conversation) => {
+        if (
+          conversation.recipients.some((recipient) =>
+            recipient.username.includes(search)
+          )
+        ) {
+          return conversation;
+        }
+      });
+      setFilteredConversations(filtered);
+    } else {
+      setFilteredConversations(conversations);
+    }
+  }, [search, conversations]);
 
   return (
     <div>
       <h1>Conversations</h1>
 
-      {conversations.map((conversation) => (
+      {filteredConversations.map((conversation) => (
         <button
           key={conversation._id}
           value={conversation._id}
