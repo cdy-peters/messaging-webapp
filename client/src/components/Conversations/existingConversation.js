@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 const ExistingConversations = (props) => {
   const [conversations, setConversations] = useState([]);
-
   const { setSelectedConversation } = props;
 
   const handleClick = (e) => {
@@ -22,6 +21,8 @@ const ExistingConversations = (props) => {
       });
       const data = await response.json();
 
+      console.log(data)
+
       setConversations(data);
     }
     getConversations();
@@ -38,7 +39,7 @@ const ExistingConversations = (props) => {
           value={conversation._id}
           onClick={handleClick}
         >
-          {conversation.recipients[1].username}
+          {conversation.recipients[0].username}
         </button>
       ))}
     </div>

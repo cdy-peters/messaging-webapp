@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 
 const router = express.Router();
 
-const User = require("../models/User");
-const Conversations = require("../models/Conversations");
+const User = require("../models/UserModel");
+const Conversations = require("../models/ConversationModel");
 
 router.post("/get_conversations", (req, res) => {
   const { userId } = req.body;
@@ -18,7 +18,16 @@ router.post("/get_conversations", (req, res) => {
     $nor: [{ messages: { $size: 0 } }],
   })
     .then((conversations) => {
-      res.json(conversations);
+      // Remove recipient that is the same as userId from each conversation
+      const filteredConversations = conversations.map((conversation) => {
+        const filteredRecipients = conversation.recipients.filter(
+          (recipient) => recipient.userId.toString() !== userId
+        );
+        return { ...conversation._doc, recipients: filteredRecipients };
+      }
+      );
+
+      res.json(filteredConversations);
     })
     .catch((err) => {
       res.json(err);
@@ -48,38 +57,25 @@ router.post("/get_messages", (req, res) => {
 router.post("/new_conversation", (req, res) => {
   const { userId, recipientId } = req.body;
 
-  // Get usernames of recipients
   User.find({ _id: { $in: [userId, recipientId] } }, (err, users) => {
     if (err) throw err;
 
     const recipients = users.map((user) => {
-      return user.username;
+      return { userId: user._id, username: user.username };
     });
-
-    // Create new conversation
+    
     const newConversation = new Conversations({
-      recipients: [
-        {
-          userId: userId,
-          username: recipients[0],
-        },
-        {
-          userId: recipientId,
-          username: recipients[1],
-        },
-      ],
+      recipients: recipients,
+      messages: [],
     });
 
     newConversation.save((err, conversation) => {
       if (err) throw err;
 
       res.json(conversation);
-    }
-    );
-  }
-  );
-}
-);
+    });
+  });
+});
 
 router.post("/send_message", (req, res) => {
   const { conversationId, senderId, message } = req.body;
