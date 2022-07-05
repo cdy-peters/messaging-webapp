@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import ConversationsHeader from "./conversationsHeader";
 import Search from "./search";
 import ExistingConversation from "./existingConversation";
 import NewConversation from "./newConversation";
@@ -11,27 +12,32 @@ const Conversations = () => {
   const [selectedConversation, setSelectedConversation] = useState(null);
 
   return (
-    <div className="display-flex">
-      <div>
-        <Search search={search} setSearch={setSearch} />
+    <div className="container">
+      <div className="row" style={{ height: "100vh" }}>
+        <div className="col-4" id="conversations">
+          <ConversationsHeader />
 
-        <ExistingConversation
-          conversations={conversations}
-          setConversations={setConversations}
-          setSelectedConversation={setSelectedConversation}
-          search={search}
-        />
-        <NewConversation
-          conversations={conversations}
-          setSelectedConversation={setSelectedConversation}
-          search={search}
-        />
-      </div>
+          <Search search={search} setSearch={setSearch} />
 
-      <div>
-        {selectedConversation && (
-          <Messages selectedConversation={selectedConversation} />
-        )}
+          <NewConversation
+            conversations={conversations}
+            setSelectedConversation={setSelectedConversation}
+            search={search}
+          />
+
+          <ExistingConversation
+            conversations={conversations}
+            setConversations={setConversations}
+            setSelectedConversation={setSelectedConversation}
+            search={search}
+          />
+        </div>
+
+        <div className="col-8">
+          {selectedConversation && (
+            <Messages selectedConversation={selectedConversation} />
+          )}
+        </div>
       </div>
     </div>
   );

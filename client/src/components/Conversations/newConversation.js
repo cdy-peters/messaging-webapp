@@ -64,10 +64,25 @@ const NewConversations = (props) => {
 
   return (
     <div>
-      <h1>New Conversation</h1>
+      {/* <h1>New Conversation</h1> */}
+      {search && (
+        <p className="conversations-title">Start a New Conversation</p>
+      )}
+
+      {search && users.length === 0 && (
+        <p>
+          User does not exist. <br></br> Make sure you correctly entered their
+          full username
+        </p>
+      )}
 
       {users.map((user) => (
-        <button key={user._id} value={user._id} onClick={handleClick}>
+        <button
+          id="conversation-button"
+          key={user._id}
+          value={user._id}
+          onClick={handleClick}
+        >
           {user.username}
         </button>
       ))}

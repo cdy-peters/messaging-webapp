@@ -54,10 +54,18 @@ const ExistingConversations = (props) => {
 
   return (
     <div>
-      <h1>Conversations</h1>
+      <p className="conversations-title">Conversations</p>
+
+      {filteredConversations.length === 0 && (
+        <p>
+          You have no existing conversations. <br></br> Search for a username
+          and start a conversation!
+        </p>
+      )}
 
       {filteredConversations.map((conversation) => (
         <button
+          id="conversation-button"
           key={conversation._id}
           value={conversation._id}
           onClick={handleClick}

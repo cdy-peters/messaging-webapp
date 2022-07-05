@@ -9,7 +9,13 @@ const Search = (props) => {
 
   return (
     <div>
-      <input type="text" value={search} onChange={handleChange} />
+      <input
+        id="conversation-search"
+        type="text"
+        value={search}
+        placeholder="Search for conversations"
+        onChange={handleChange}
+      />
     </div>
   );
 };

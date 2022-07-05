@@ -7,3 +7,46 @@
 .display-flex {
   display: flex;
 }
+
+#conversations {
+  background-color: #e8e8e8;
+  padding: 0;
+}
+
+#conversation-search {
+  border: none;
+  padding: 0.5rem;
+  width: 100%;
+  border-radius: 7px;
+
+  background-color: #fff;
+  box-shadow: 0 0 0 1px #ccc;
+}
+
+.conversations-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  background-color: rgb(195, 195, 195);
+  margin: 0;
+}
+
+#conversation-button {
+  background-color: #e8e8e8;
+  color: #000;
+
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  border-bottom: 1px solid #bababa;
+
+  padding: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+#conversation-button:hover {
+  background-color: #d8d8d8;
+}
