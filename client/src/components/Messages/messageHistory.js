@@ -34,12 +34,29 @@ const MessageHistory = (props) => {
     );
   });
 
+  const renderMessage = (message) => {
+    if (message.sender === localStorage.getItem('username')) {
+      return (
+        <div key={message._id} className='message-sent'>
+          <p className="messages-time">Time</p>
+          <p className="messages-message">{message.message}</p>
+        </div>
+      )
+    } else {
+      return (
+        <div key={message._id} className='message-received'>
+          <p className="messages-time">Time</p>
+          <p className="messages-message">{message.message}</p>
+        </div>
+      )
+    }
+  }
+
+
   return (
     <div>
       {messages.map((message) => (
-        <p key={message._id}>
-          {message.sender}: {message.message}
-        </p>
+        renderMessage(message)
       ))}
     </div>
   );

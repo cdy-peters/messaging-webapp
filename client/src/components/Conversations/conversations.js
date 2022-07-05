@@ -33,7 +33,7 @@ const Conversations = () => {
           />
         </div>
 
-        <div className="col-8">
+        <div className="col-8" id='messages'>
           {selectedConversation && (
             <Messages selectedConversation={selectedConversation} />
           )}

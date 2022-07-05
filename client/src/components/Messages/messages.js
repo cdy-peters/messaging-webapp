@@ -1,5 +1,6 @@
 import React from 'react';
 
+import MessagesHeader from './messagesHeader';
 import MessageHistory from './messageHistory';
 import MessageField from './messageField';
 
@@ -8,7 +9,9 @@ const Messages = (props) => {
 
     return (
         <div>
-            <h1>{username}</h1>
+            {/* <h3>{username}</h3> */}
+            <MessagesHeader username={username} />
+
             <MessageHistory conversationId={conversationId} />
             <MessageField conversationId={conversationId} />
         </div>

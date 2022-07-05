@@ -23,7 +23,7 @@ const MessageField = (props) => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form id='messages-form' onSubmit={handleSubmit}>
             <input type="text" placeholder="Send message" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} />
             <button type="submit">Send</button>
         </form>

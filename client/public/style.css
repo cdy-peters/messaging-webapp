@@ -8,9 +8,13 @@
   display: flex;
 }
 
+.float-right {
+  float: right
+}
+
+/* Conversations */
 #conversations {
   background-color: #e8e8e8;
-  padding: 0;
 }
 
 #conversations-header {
@@ -70,4 +74,83 @@
 
 #conversation-button:hover {
   background-color: #d8d8d8;
+}
+
+/* Messages */
+#messages {
+  background-color: #f8f8f8;
+  max-height: 100vh;
+  overflow-y: scroll;
+}
+
+#messages-header {
+  padding: 0.5rem;
+  background-color: #bababa;
+}
+
+.messages-sender {
+  margin: 0;
+}
+
+.messages-time {
+  font-size: 0.8rem;
+  color: #575757;
+  margin: 0;
+}
+
+.messages-message {
+  overflow-wrap: break-word;
+  width: fit-content;
+  max-width: 100%;
+
+  background-color: rgb(195, 195, 195);
+  padding: 5px;
+  border-radius: 7px;
+}
+
+.message-sent {
+  text-align: right;
+  margin-left: 50%;
+}
+
+.message-sent p {
+  margin-left: auto;
+}
+
+.message-received {
+  text-align: left;
+  margin-right: 50%;
+}
+
+#messages-form {
+  display: flex;
+  flex-direction: row;
+
+  border: 1px solid black;
+  border-radius: 7px;
+  margin-bottom: 5px;
+}
+
+#messages-form input {
+  flex-grow: 2;
+  border: none;
+  border-radius: 7px;
+  background-color: white;
+  padding: 0.5rem;
+}
+
+#messages-form input:focus {
+  outline: none;
+}
+
+#messages-form button {
+  border: none;
+  border-left: 1px solid rgb(136, 136, 136);
+  border-radius: 0 7px 7px 0;
+  background-color: rgb(195, 195, 195);
+  padding: 0.5rem;
+}
+
+#messages-form button:hover {
+  background-color: rgb(170, 170, 170);
 }
