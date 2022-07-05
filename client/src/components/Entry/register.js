@@ -98,6 +98,7 @@ export default function Register({ setToken }) {
         .then(response => response.json())
         .then(data => {
             if ('token' in data) {
+                localStorage.setItem('username', newUser.username);
                 setToken(data.token);
                 navigate('/');
             } else {

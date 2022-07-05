@@ -62,6 +62,7 @@ export default function Login({ setToken }) {
         .then(response => response.json())
         .then(data => {
             if ('token' in data) {
+                localStorage.setItem('username', user.username)
                 setToken(data.token);
                 navigate('/');
             } else {

@@ -13,6 +13,27 @@
   padding: 0;
 }
 
+#conversations-header {
+  padding: 0.5rem;
+}
+
+#conversations-title {
+  float: left;
+}
+
+#logout-button {
+  float: right;
+
+  background-color: rgb(195, 195, 195);
+  border: none;
+  border-radius: 7px;
+  padding: 0.5rem;
+}
+
+#logout-button:hover {
+  background-color: rgb(170, 170, 170);
+}
+
 #conversation-search {
   border: none;
   padding: 0.5rem;
@@ -23,7 +44,7 @@
   box-shadow: 0 0 0 1px #ccc;
 }
 
-.conversations-title {
+.conversations-subtitle {
   font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 0.5rem;

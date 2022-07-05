@@ -54,7 +54,7 @@ const ExistingConversations = (props) => {
 
   return (
     <div>
-      <p className="conversations-title">Conversations</p>
+      <p className="conversations-subtitle">Conversations</p>
 
       {filteredConversations.length === 0 && (
         <p>

@@ -66,7 +66,7 @@ const NewConversations = (props) => {
     <div>
       {/* <h1>New Conversation</h1> */}
       {search && (
-        <p className="conversations-title">Start a New Conversation</p>
+        <p className="conversations-subtitle">Start a New Conversation</p>
       )}
 
       {search && users.length === 0 && (
