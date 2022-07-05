@@ -56,11 +56,15 @@ const ExistingConversations = (props) => {
     <div>
       <p className="conversations-subtitle">Conversations</p>
 
-      {filteredConversations.length === 0 && (
+      {(!search && filteredConversations.length === 0) && (
         <p>
           You have no existing conversations. <br></br> Search for a username
           and start a conversation!
         </p>
+      )}
+
+      {(search && filteredConversations.length === 0) && (
+        <p>No conversations found</p>
       )}
 
       {filteredConversations.map((conversation) => (
