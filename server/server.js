@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const connDb = require("./config/db");
 
-connDb()
+connDb();
 const app = express();
 
 const port = process.env.PORT || 5000;
@@ -29,9 +29,26 @@ app.use((req, res, next) => {
 app.use(require("./routes/entryRoutes"));
 app.use(require("./routes/conversationRoutes"));
 
-
 io.on("connection", (socket) => {
   console.log("A client connected");
+
+  socket.on("user_connected", (user) => {
+    socket.join(user.userId);
+    console.log(user);
+  });
+
+  socket.on("new_message", (data) => {
+    // console.log(data);
+
+    const recipients = data.recipients;
+    const message = data.message;
+
+    recipients.forEach((recipient) => {
+      if (recipient.userId === message.senderId) return;
+
+      socket.in(recipient.userId).emit("message", message);
+    });
+  });
 
   socket.on("disconnect", () => {
     console.log("A client disconnected");

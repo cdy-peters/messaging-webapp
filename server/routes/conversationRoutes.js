@@ -106,13 +106,17 @@ router.post("/send_message", (req, res) => {
 
         const lastMessageId =
           conversation.messages[conversation.messages.length - 1]._id;
-        req.io.sockets.emit("message", {
-          _id: lastMessageId,
-          sender: user.username,
-          message: message,
-        });
 
-        res.json(conversation);
+        res.json({
+          recipients: conversation.recipients,
+          message: {
+            conversationId: conversation._id,
+            _id: lastMessageId,
+            senderId: user._id,
+            sender: user.username,
+            message: message,
+          },
+        });
       }
     );
   });

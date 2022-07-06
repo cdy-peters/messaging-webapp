@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-import socketIOClient from "socket.io-client";
+import React, { useEffect } from "react";
 
 const URL = "RemovedIP";
 
 const MessageHistory = (props) => {
-  const [messages, setMessages] = useState([]);
+  const { socket, messages, setMessages } = props;
 
   useEffect(() => {
     async function getMessages() {
@@ -18,7 +17,6 @@ const MessageHistory = (props) => {
         }),
       });
       const data = await response.json();
-      console.log(data);
 
       setMessages(data);
     }
@@ -26,42 +24,30 @@ const MessageHistory = (props) => {
   }, [props.conversationId]);
 
   useEffect(() => {
-    const socket = socketIOClient(URL);
-    socket.on(
-      "message",
-      (data) => {
-        setMessages([...messages, data]);
-      },
-      []
-    );
+    socket.on("message", (data) => {
+      setMessages([...messages, data]);
+    });
   });
 
   const renderMessage = (message) => {
-    if (message.sender === localStorage.getItem('username')) {
+    if (message.sender === localStorage.getItem("username")) {
       return (
-        <div key={message._id} className='message-sent'>
+        <div key={message._id} className="message-sent">
           <p className="messages-time">Time</p>
           <p className="messages-message">{message.message}</p>
         </div>
-      )
+      );
     } else {
       return (
-        <div key={message._id} className='message-received'>
+        <div key={message._id} className="message-received">
           <p className="messages-time">Time</p>
           <p className="messages-message">{message.message}</p>
         </div>
-      )
+      );
     }
-  }
+  };
 
-
-  return (
-    <div>
-      {messages.map((message) => (
-        renderMessage(message)
-      ))}
-    </div>
-  );
+  return <div>{messages.map((message) => renderMessage(message))}</div>;
 };
 
 export default MessageHistory;

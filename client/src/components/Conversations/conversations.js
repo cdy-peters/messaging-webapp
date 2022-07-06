@@ -6,7 +6,9 @@ import ExistingConversation from "./existingConversation";
 import NewConversation from "./newConversation";
 import Messages from "../Messages/messages";
 
-const Conversations = () => {
+const Conversations = (props) => {
+  const { socket } = props;
+
   const [search, setSearch] = useState("");
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
@@ -26,6 +28,7 @@ const Conversations = () => {
           />
 
           <ExistingConversation
+            socket={socket}
             conversations={conversations}
             setConversations={setConversations}
             setSelectedConversation={setSelectedConversation}
@@ -33,9 +36,12 @@ const Conversations = () => {
           />
         </div>
 
-        <div className="col-8" id='messages'>
+        <div className="col-8" id="messages">
           {selectedConversation && (
-            <Messages selectedConversation={selectedConversation} />
+            <Messages
+              socket={socket}
+              selectedConversation={selectedConversation}
+            />
           )}
         </div>
       </div>
