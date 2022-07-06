@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import socketIOClient from "socket.io-client";
 
+const URL = "RemovedIP";
+
 const MessageHistory = (props) => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     async function getMessages() {
-      const response = await fetch("http://localhost:5000/get_messages", {
+      const response = await fetch(URL + "get_messages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -24,7 +26,7 @@ const MessageHistory = (props) => {
   }, [props.conversationId]);
 
   useEffect(() => {
-    const socket = socketIOClient("http://localhost:5000");
+    const socket = socketIOClient(URL);
     socket.on(
       "message",
       (data) => {

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import $ from 'jquery';
 
+const URL = 'RemovedIP'
+
 export default function Login({ setToken }) {
     const [form, setForm] = useState({
         username: '',
@@ -52,7 +54,7 @@ export default function Login({ setToken }) {
             return
         }
 
-        fetch("http://localhost:5000/login", {
+        fetch(URL + "login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+const URL = 'RemovedIP';
+
 const ExistingConversations = (props) => {
   const [filteredConversations, setFilteredConversations] = useState([]);
   const {
@@ -18,7 +20,7 @@ const ExistingConversations = (props) => {
 
   useEffect(() => {
     async function getConversations() {
-      const response = await fetch("http://localhost:5000/get_conversations", {
+      const response = await fetch(URL + "get_conversations", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

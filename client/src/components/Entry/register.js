@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import $ from 'jquery';
 
+const URL = 'RemovedIP'
+
 var email_regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 var username_regex = /^[a-zA-Z0-9_-]{3,20}$/;
 var password_regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
@@ -88,7 +90,7 @@ export default function Register({ setToken }) {
             return
         }
 
-        fetch("http://localhost:5000/register", {
+        fetch(URL + "register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

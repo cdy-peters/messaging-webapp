@@ -14,7 +14,7 @@ const server = app.listen(port, () => {
 
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URL,
   },
 });
 
@@ -28,3 +28,12 @@ app.use((req, res, next) => {
 
 app.use(require("./routes/entryRoutes"));
 app.use(require("./routes/conversationRoutes"));
+
+
+io.on("connection", (socket) => {
+  console.log("A client connected");
+
+  socket.on("disconnect", () => {
+    console.log("A client disconnected");
+  });
+});

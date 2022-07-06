@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 
+const URL = "RemovedIP";
+
 const NewConversations = (props) => {
   const [users, setUsers] = useState([]);
 
   const { conversations, setSelectedConversation, search } = props;
 
   const handleClick = (e) => {
-    fetch("http://localhost:5000/new_conversation", {
+    fetch(URL + "new_conversation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +30,7 @@ const NewConversations = (props) => {
   useEffect(() => {
     if (search) {
       async function getUsers() {
-        const response = await fetch("http://localhost:5000/get_users", {
+        const response = await fetch(URL + "get_users", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
