@@ -3,8 +3,8 @@ import React, { useEffect } from "react";
 const URL = "RemovedIP";
 
 const MessageHistory = (props) => {
-  const { socket, messages, setMessages } = props;
-
+  const { socket, messages, setMessages, conversationId } = props;
+  
   useEffect(() => {
     async function getMessages() {
       const response = await fetch(URL + "get_messages", {
@@ -13,7 +13,7 @@ const MessageHistory = (props) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          conversationId: props.conversationId,
+          conversationId: conversationId,
         }),
       });
       const data = await response.json();
@@ -21,13 +21,15 @@ const MessageHistory = (props) => {
       setMessages(data);
     }
     getMessages();
-  }, [props.conversationId]);
+  }, [conversationId]);
 
   useEffect(() => {
     socket.on("message", (data) => {
-      setMessages([...messages, data]);
+      if (data.conversationId === conversationId) {
+        setMessages((messages) => [...messages, data]);
+      }
     });
-  });
+  }, [socket]);
 
   const renderMessage = (message) => {
     if (message.sender === localStorage.getItem("username")) {

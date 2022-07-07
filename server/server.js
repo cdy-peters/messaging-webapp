@@ -33,8 +33,10 @@ io.on("connection", (socket) => {
   console.log("A client connected");
 
   socket.on("user_connected", (user) => {
-    socket.join(user.userId);
-    console.log(user);
+    if (user.userId) {
+      socket.join(user.userId);
+      console.log(user.userId, 'connected to room');
+    }
   });
 
   socket.on("new_message", (data) => {
