@@ -124,6 +124,7 @@ router.post("/send_message", (req, res) => {
             senderId: user._id,
             sender: user.username,
             message: message,
+            updatedAt: conversation.updatedAt,
           },
         });
       }

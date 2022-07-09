@@ -19,6 +19,8 @@ const Messages = (props) => {
         messages={messages}
         setMessages={setMessages}
         conversationId={conversationId}
+        setConversations={setConversations}
+        conversations={conversations}
       />
       <MessageField
         socket={socket}
