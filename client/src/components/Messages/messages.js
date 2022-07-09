@@ -5,7 +5,7 @@ import MessageHistory from "./messageHistory";
 import MessageField from "./messageField";
 
 const Messages = (props) => {
-  const { socket } = props;
+  const { socket, conversations, setConversations } = props;
   const { conversationId, username } = props.selectedConversation;
 
   const [messages, setMessages] = useState([]);
@@ -25,6 +25,8 @@ const Messages = (props) => {
         messages={messages}
         setMessages={setMessages}
         conversationId={conversationId}
+        setConversations={setConversations}
+        conversations={conversations}
       />
     </div>
   );

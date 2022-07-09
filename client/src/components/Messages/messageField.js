@@ -3,7 +3,13 @@ import React, { useState } from "react";
 const URL = "RemovedIP";
 
 const MessageField = (props) => {
-  const { socket, messages, setMessages } = props;
+  const {
+    socket,
+    messages,
+    setMessages,
+    setConversations,
+    conversations,
+  } = props;
   const [newMessage, setNewMessage] = useState("");
 
   const handleSubmit = (e) => {
@@ -22,11 +28,25 @@ const MessageField = (props) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        socket.emit("new_message", data);
-        setMessages([...messages, data.message]);
-      });
+        if (
+          conversations.find(
+            (conversation) => conversation._id === props.conversationId
+          )
+        ) {
+          socket.emit("new_message", data);
+        } else {
+          const userId = localStorage.getItem("token");
+          const filteredRecipients = data.recipients.filter(
+            (recipient) => recipient.userId.toString() !== userId
+          );
+          const filteredData = { ...data, recipients: filteredRecipients };
+          setConversations([...conversations, filteredData]);
 
-    setNewMessage("");
+          socket.emit("new_conversation", filteredData);
+        }
+        setMessages([...messages, data.message]);
+        setNewMessage("");
+      });
   };
 
   return (

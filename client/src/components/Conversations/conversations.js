@@ -23,10 +23,8 @@ const Conversations = (props) => {
 
           <NewConversation
             conversations={conversations}
-            setConversations={setConversations}
             setSelectedConversation={setSelectedConversation}
             search={search}
-            socket={socket}
           />
 
           <ExistingConversation
@@ -42,6 +40,8 @@ const Conversations = (props) => {
           {selectedConversation && (
             <Messages
               socket={socket}
+              conversations={conversations}
+              setConversations={setConversations}
               selectedConversation={selectedConversation}
             />
           )}

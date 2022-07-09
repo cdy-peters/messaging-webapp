@@ -108,6 +108,7 @@ router.post("/send_message", (req, res) => {
           conversation.messages[conversation.messages.length - 1]._id;
 
         res.json({
+          ...conversation._doc,
           recipients: conversation.recipients,
           message: {
             conversationId: conversation._id,
