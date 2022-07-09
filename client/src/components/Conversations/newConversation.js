@@ -5,7 +5,13 @@ const URL = "RemovedIP";
 const NewConversations = (props) => {
   const [users, setUsers] = useState([]);
 
-  const { conversations, setSelectedConversation, search } = props;
+  const {
+    conversations,
+    setConversations,
+    setSelectedConversation,
+    search,
+    socket,
+  } = props;
 
   const handleClick = (e) => {
     fetch(URL + "new_conversation", {
@@ -20,6 +26,15 @@ const NewConversations = (props) => {
     })
       .then((res) => res.json())
       .then((data) => {
+        const userId = localStorage.getItem("token");
+        const filteredRecipients = data.recipients.filter(
+          (recipient) => recipient.userId.toString() !== userId
+        );
+        const filteredData = { ...data, recipients: filteredRecipients };
+        setConversations([...conversations, filteredData]);
+
+        socket.emit("new_conversation", filteredData);
+
         setSelectedConversation({
           conversationId: data._id,
           username: e.target.innerText,
@@ -62,11 +77,10 @@ const NewConversations = (props) => {
     } else {
       setUsers([]);
     }
-  }, [search]);
+  }, [search, conversations]);
 
   return (
     <div>
-      {/* <h1>New Conversation</h1> */}
       {search && (
         <p className="conversations-subtitle">Start a New Conversation</p>
       )}

@@ -35,13 +35,19 @@ io.on("connection", (socket) => {
   socket.on("user_connected", (user) => {
     if (user.userId) {
       socket.join(user.userId);
-      console.log(user.userId, 'connected to room');
+      console.log(user.userId, "connected to room");
     }
   });
 
-  socket.on("new_message", (data) => {
-    // console.log(data);
+  socket.on("new_conversation", (conversation) => {
+    const recipients = conversation.recipients;
 
+    recipients.forEach((recipient) => {
+      socket.in(recipient.userId).emit("new_conversation", conversation);
+    });
+  });
+
+  socket.on("new_message", (data) => {
     const recipients = data.recipients;
     const message = data.message;
 

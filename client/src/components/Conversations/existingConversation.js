@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const URL = 'RemovedIP';
+const URL = "RemovedIP";
 
 const ExistingConversations = (props) => {
   const [filteredConversations, setFilteredConversations] = useState([]);
@@ -9,6 +9,7 @@ const ExistingConversations = (props) => {
     setConversations,
     setSelectedConversation,
     search,
+    socket,
   } = props;
 
   const handleClick = (e) => {
@@ -54,18 +55,24 @@ const ExistingConversations = (props) => {
     }
   }, [search, conversations]);
 
+  useEffect(() => {
+    socket.on("new_conversation", (data) => {
+      setConversations([...conversations, data]);
+    });
+  }, [socket]);
+
   return (
     <div>
       <p className="conversations-subtitle">Conversations</p>
 
-      {(!search && filteredConversations.length === 0) && (
+      {!search && filteredConversations.length === 0 && (
         <p>
           You have no existing conversations. <br></br> Search for a username
           and start a conversation!
         </p>
       )}
 
-      {(search && filteredConversations.length === 0) && (
+      {search && filteredConversations.length === 0 && (
         <p>No conversations found</p>
       )}
 
