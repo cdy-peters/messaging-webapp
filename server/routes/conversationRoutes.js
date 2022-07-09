@@ -22,7 +22,15 @@ router.post("/get_conversations", (req, res) => {
         const filteredRecipients = conversation.recipients.filter(
           (recipient) => recipient.userId.toString() !== userId
         );
-        return { ...conversation._doc, recipients: filteredRecipients };
+
+        const lastMessage =
+          conversation.messages[conversation.messages.length - 1];
+        return {
+          _id: conversation._id,
+          recipients: filteredRecipients,
+          lastMessage,
+          updatedAt: conversation.updatedAt,
+        };
       });
 
       res.json(filteredConversations);

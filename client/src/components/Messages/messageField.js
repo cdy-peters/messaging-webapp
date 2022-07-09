@@ -39,7 +39,12 @@ const MessageField = (props) => {
           const filteredRecipients = data.recipients.filter(
             (recipient) => recipient.userId.toString() !== userId
           );
-          const filteredData = { ...data, recipients: filteredRecipients };
+          const filteredData = {
+            _id: data._id,
+            recipients: filteredRecipients,
+            lastMessage: data.message,
+            updatedAt: data.updatedAt,
+          };
           setConversations([...conversations, filteredData]);
 
           socket.emit("new_conversation", filteredData);

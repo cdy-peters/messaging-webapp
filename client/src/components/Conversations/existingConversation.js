@@ -14,8 +14,8 @@ const ExistingConversations = (props) => {
 
   const handleClick = (e) => {
     setSelectedConversation({
-      conversationId: e.target.value,
-      username: e.target.innerText,
+      conversationId: e.currentTarget.dataset.id,
+      username: e.currentTarget.dataset.username,
     });
   };
 
@@ -77,14 +77,24 @@ const ExistingConversations = (props) => {
       )}
 
       {filteredConversations.map((conversation) => (
-        <button
-          id="conversation-button"
-          key={conversation._id}
-          value={conversation._id}
-          onClick={handleClick}
-        >
-          {conversation.recipients[0].username}
-        </button>
+        <div key={conversation._id}>
+          <button
+            id="conversation-button"
+            data-id={conversation._id}
+            data-username={conversation.recipients[0].username}
+            onClick={handleClick}
+          >
+            <span>
+              {conversation.recipients[0].username}
+              <p style={{ float: "right", margin: 0 }}>
+                {conversation.updatedAt}
+              </p>
+            </span>
+            <p className="message-preview">
+              {conversation.lastMessage.message}
+            </p>
+          </button>
+        </div>
       ))}
     </div>
   );

@@ -9,7 +9,7 @@
 }
 
 .float-right {
-  float: right
+  float: right;
 }
 
 /* Conversations */
@@ -74,6 +74,13 @@
 
 #conversation-button:hover {
   background-color: #d8d8d8;
+}
+
+.message-preview {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  width: 100%;
 }
 
 /* Messages */
