@@ -17,6 +17,26 @@ const ExistingConversations = (props) => {
       conversationId: e.currentTarget.dataset.id,
       username: e.currentTarget.dataset.username,
     });
+
+    const index = conversations.findIndex(
+      (conversation) => conversation._id === e.currentTarget.dataset.id
+    );
+    if (conversations[index].read === false) {
+      fetch(URL + "read_conversation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          conversationId: e.currentTarget.dataset.id,
+          userId: localStorage.getItem("token"),
+        }),
+      });
+
+      const newConversations = [...conversations];
+      newConversations[index].read = true;
+      setConversations(newConversations);
+    }
   };
 
   useEffect(() => {
@@ -61,6 +81,38 @@ const ExistingConversations = (props) => {
     });
   }, [socket]);
 
+  const conversationDetails = (conversation) => {
+    if (conversation.read) {
+      return (
+        <div>
+          <span>
+            {conversation.recipients[0].username}
+            <p style={{ float: "right", margin: 0 }}>
+              {conversation.updatedAt}
+            </p>
+          </span>
+          <p className="message-preview">{conversation.lastMessage.message}</p>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <b>
+            <span>
+              {conversation.recipients[0].username}
+              <p style={{ float: "right", margin: 0 }}>
+                {conversation.updatedAt}
+              </p>
+            </span>
+            <p className="message-preview">
+              {conversation.lastMessage.message}
+            </p>
+          </b>
+        </div>
+      );
+    }
+  };
+
   return (
     <div>
       <p className="conversations-subtitle">Conversations</p>
@@ -84,15 +136,7 @@ const ExistingConversations = (props) => {
             data-username={conversation.recipients[0].username}
             onClick={handleClick}
           >
-            <span>
-              {conversation.recipients[0].username}
-              <p style={{ float: "right", margin: 0 }}>
-                {conversation.updatedAt}
-              </p>
-            </span>
-            <p className="message-preview">
-              {conversation.lastMessage.message}
-            </p>
+            {conversationDetails(conversation)}
           </button>
         </div>
       ))}

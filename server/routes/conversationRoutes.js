@@ -19,6 +19,10 @@ router.post("/get_conversations", (req, res) => {
   })
     .then((conversations) => {
       const filteredConversations = conversations.map((conversation) => {
+        const read = conversation.recipients.find(
+          (recipient) => recipient.userId.toString() === userId
+        ).read;
+
         const filteredRecipients = conversation.recipients.filter(
           (recipient) => recipient.userId.toString() !== userId
         );
@@ -30,10 +34,35 @@ router.post("/get_conversations", (req, res) => {
           recipients: filteredRecipients,
           lastMessage,
           updatedAt: conversation.updatedAt,
+          read,
         };
       });
 
       res.json(filteredConversations);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+router.post("/read_conversation", (req, res) => {
+  const { conversationId, userId } = req.body;
+
+  Conversations.findOne({ _id: conversationId })
+    .then((conversation) => {
+      const recipient = conversation.recipients.find(
+        (recipient) => recipient.userId.toString() === userId
+      );
+      recipient.read = true;
+
+      conversation
+        .save()
+        .then((conversation) => {
+          res.json(conversation);
+        })
+        .catch((err) => {
+          res.json(err);
+        });
     })
     .catch((err) => {
       res.json(err);
@@ -76,7 +105,18 @@ router.post("/new_conversation", (req, res) => {
     if (err) throw err;
 
     const recipients = users.map((user) => {
-      return { userId: user._id, username: user.username };
+      if (user._id.toString() === userId) {
+        return {
+          userId: user._id,
+          username: user.username,
+          read: true,
+        };
+      } else {
+        return {
+          userId: user._id,
+          username: user.username,
+        };
+      }
     });
 
     const newConversation = new Conversations({
@@ -93,42 +133,53 @@ router.post("/new_conversation", (req, res) => {
 });
 
 router.post("/send_message", (req, res) => {
-  const { conversationId, senderId, message } = req.body;
+  const { conversationId, senderId, senderUser, message } = req.body;
 
   User.findById(senderId, (err, user) => {
     if (err) throw err;
 
-    Conversations.findByIdAndUpdate(
-      conversationId,
-      {
-        $push: {
-          messages: {
-            sender: user.username,
-            message: message,
-          },
-        },
-      },
-      { new: true },
-      (err, conversation) => {
-        if (err) throw err;
+    Conversations.findOne({ _id: conversationId }, (err, conversation) => {
+      if (err) throw err;
 
-        const lastMessageId =
-          conversation.messages[conversation.messages.length - 1]._id;
+      const recipients = conversation.recipients;
+      const newMessage = {
+        sender: user.username,
+        message: message,
+      };
 
-        res.json({
-          ...conversation._doc,
-          recipients: conversation.recipients,
-          message: {
-            conversationId: conversation._id,
-            _id: lastMessageId,
-            senderId: user._id,
-            sender: user.username,
-            message: message,
-            updatedAt: conversation.updatedAt,
-          },
+      conversation.messages.push(newMessage);
+
+      recipients.forEach((recipient) => {
+        if (recipient.userId.toString() === senderId) {
+          recipient.read = true;
+        } else {
+          recipient.read = false;
+        }
+      });
+
+      conversation
+        .save()
+        .then((conversation) => {
+          const lastMessageId =
+            conversation.messages[conversation.messages.length - 1]._id;
+
+          res.json({
+            ...conversation._doc,
+            recipients: recipients,
+            message: {
+              conversationId: conversation._id,
+              _id: lastMessageId,
+              senderId: user._id,
+              sender: user.username,
+              message: message,
+              updatedAt: conversation.updatedAt,
+            },
+          });
+        })
+        .catch((err) => {
+          res.json(err);
         });
-      }
-    );
+    });
   });
 });
 

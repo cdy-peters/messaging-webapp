@@ -4,9 +4,15 @@ const URL = "RemovedIP";
 var selectChat;
 
 const MessageHistory = (props) => {
-  const { socket, messages, setMessages, conversationId, conversations, setConversations } = props;
+  const {
+    socket,
+    messages,
+    setMessages,
+    conversationId,
+    setConversations,
+  } = props;
   selectChat = conversationId;
-  
+
   useEffect(() => {
     async function getMessages() {
       const response = await fetch(URL + "get_messages", {
@@ -27,11 +33,10 @@ const MessageHistory = (props) => {
 
   useEffect(() => {
     socket.on("message", (data) => {
-      console.log(conversations)
-      console.log(data)
       if (data.conversationId === selectChat) {
         setMessages((messages) => [...messages, data]);
       } else {
+        // TODO: Redo the returned json from /send_message to be alike /get_messages
         setConversations((conversations) => {
           const newConversations = [...conversations];
           const index = newConversations.findIndex(
@@ -43,10 +48,9 @@ const MessageHistory = (props) => {
             _id: data._id,
           };
           newConversations[index].updatedAt = data.updatedAt;
-          console.log(newConversations)
+          newConversations[index].read = false;
           return newConversations;
-        }
-        );
+        });
       }
     });
   }, [socket]);

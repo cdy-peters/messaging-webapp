@@ -23,6 +23,7 @@ const MessageField = (props) => {
       body: JSON.stringify({
         conversationId: props.conversationId,
         senderId: localStorage.getItem("token"),
+        senderUser: localStorage.getItem("username"),
         message: newMessage,
       }),
     })
@@ -44,6 +45,7 @@ const MessageField = (props) => {
             recipients: filteredRecipients,
             lastMessage: data.message,
             updatedAt: data.updatedAt,
+            read: true,
           };
           setConversations([...conversations, filteredData]);
 
