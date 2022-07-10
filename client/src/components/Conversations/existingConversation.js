@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 
 const URL = "RemovedIP";
 
@@ -88,7 +89,7 @@ const ExistingConversations = (props) => {
           <span>
             {conversation.recipients[0].username}
             <p style={{ float: "right", margin: 0 }}>
-              {conversation.updatedAt}
+              {moment(conversation.updatedAt).fromNow()}
             </p>
           </span>
           <p className="message-preview">{conversation.lastMessage.message}</p>
@@ -101,7 +102,7 @@ const ExistingConversations = (props) => {
             <span>
               {conversation.recipients[0].username}
               <p style={{ float: "right", margin: 0 }}>
-                {conversation.updatedAt}
+                {moment(conversation.updatedAt).fromNow()}
               </p>
             </span>
             <p className="message-preview">
@@ -128,18 +129,22 @@ const ExistingConversations = (props) => {
         <p>No conversations found</p>
       )}
 
-      {filteredConversations.map((conversation) => (
-        <div key={conversation._id}>
-          <button
-            id="conversation-button"
-            data-id={conversation._id}
-            data-username={conversation.recipients[0].username}
-            onClick={handleClick}
-          >
-            {conversationDetails(conversation)}
-          </button>
-        </div>
-      ))}
+      {filteredConversations
+        .sort((a, b) => {
+          return new Date(b.updatedAt) - new Date(a.updatedAt);
+        })
+        .map((conversation) => (
+          <div key={conversation._id}>
+            <button
+              id="conversation-button"
+              data-id={conversation._id}
+              data-username={conversation.recipients[0].username}
+              onClick={handleClick}
+            >
+              {conversationDetails(conversation)}
+            </button>
+          </div>
+        ))}
     </div>
   );
 };
