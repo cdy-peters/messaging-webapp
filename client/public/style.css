@@ -103,6 +103,16 @@
   font-size: 0.8rem;
   color: #575757;
   margin: 0;
+  text-align: center;
+
+  border-bottom: 1px solid #bababa;
+  line-height: 0.1em;
+  margin: 10px 0;
+}
+
+.messages-time span {
+  background: #f8f8f8;
+  padding: 0 10px;
 }
 
 .messages-message {
@@ -117,7 +127,6 @@
 
 .message-sent {
   text-align: right;
-  margin-left: 50%;
 }
 
 .message-sent p {
@@ -126,7 +135,6 @@
 
 .message-received {
   text-align: left;
-  margin-right: 50%;
 }
 
 #messages-form {

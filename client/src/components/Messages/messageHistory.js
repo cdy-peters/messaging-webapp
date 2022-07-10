@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import moment from "moment";
 
 const URL = "RemovedIP";
 var selectChat;
@@ -68,21 +69,46 @@ const MessageHistory = (props) => {
     });
   }, [socket]);
 
+  var prevTime;
+
   const renderMessage = (message) => {
-    if (message.sender === localStorage.getItem("username")) {
-      return (
-        <div key={message._id} className="message-sent">
-          <p className="messages-time">Time</p>
-          <p className="messages-message">{message.message}</p>
-        </div>
-      );
+    const time = moment(message.date).fromNow();
+
+    if (!prevTime || prevTime !== time) {
+      prevTime = time;
+      if (message.sender === localStorage.getItem("username")) {
+        return (
+          <div key={message._id} className="message-sent">
+            <p className="messages-time">
+              <span>{time}</span>
+            </p>
+            <p className="messages-message">{message.message}</p>
+          </div>
+        );
+      } else {
+        return (
+          <div key={message._id} className="message-received">
+            <p className="messages-time">
+              <span>{time}</span>
+            </p>
+            <p className="messages-message">{message.message}</p>
+          </div>
+        );
+      }
     } else {
-      return (
-        <div key={message._id} className="message-received">
-          <p className="messages-time">Time</p>
-          <p className="messages-message">{message.message}</p>
-        </div>
-      );
+      if (message.sender === localStorage.getItem("username")) {
+        return (
+          <div key={message._id} className="message-sent">
+            <p className="messages-message">{message.message}</p>
+          </div>
+        );
+      } else {
+        return (
+          <div key={message._id} className="message-received">
+            <p className="messages-message">{message.message}</p>
+          </div>
+        );
+      }
     }
   };
 
