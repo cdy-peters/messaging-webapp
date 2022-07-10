@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 
 import MessagesHeader from "./messagesHeader";
 import MessageHistory from "./messageHistory";
 import MessageField from "./messageField";
 
 const Messages = (props) => {
-  const { socket, conversations, setConversations } = props;
+  const { socket, conversations, setConversations, messages, setMessages } = props;
   const { conversationId, username } = props.selectedConversation;
-
-  const [messages, setMessages] = useState([]);
 
   return (
     <div>
