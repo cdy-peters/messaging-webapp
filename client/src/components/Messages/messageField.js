@@ -35,6 +35,19 @@ const MessageField = (props) => {
           )
         ) {
           socket.emit("new_message", data);
+
+          const newConversations = [...conversations];
+          const index = newConversations.findIndex(
+            (conversation) => conversation._id === props.conversationId
+          );
+          newConversations[index].lastMessage = {
+            message: newMessage,
+            sender: localStorage.getItem("username"),
+            _id: data._id,
+          };
+          newConversations[index].updatedAt = data.updatedAt;
+          newConversations[index].read = true;
+          setConversations(newConversations);
         } else {
           const userId = localStorage.getItem("token");
           const filteredRecipients = data.recipients.filter(
