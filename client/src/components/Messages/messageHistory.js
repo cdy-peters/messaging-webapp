@@ -49,7 +49,10 @@ const MessageHistory = (props) => {
       } else {
         if (
           (!prevSender || prevSender !== message.sender) &&
-          conversation.recipients.length > 1
+          (conversation.recipients.length > 1 ||
+            !conversation.recipients.find(
+              (recipient) => recipient.username === message.sender
+            ))
         ) {
           prevSender = message.sender;
           return (
@@ -82,7 +85,10 @@ const MessageHistory = (props) => {
       } else {
         if (
           (!prevSender || prevSender !== message.sender) &&
-          conversation.recipients.length > 1
+          (conversation.recipients.length > 1 ||
+            !conversation.recipients.find(
+              (recipient) => recipient.username === message.sender
+            ))
         ) {
           prevSender = message.sender;
           return (

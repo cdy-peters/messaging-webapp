@@ -1,7 +1,7 @@
 import React from "react";
 
 const SettingsHeader = (props) => {
-  const { setShowSettings, selectedConversation } = props;
+  const { setShowSettings } = props;
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -10,7 +10,7 @@ const SettingsHeader = (props) => {
 
   return (
     <div id="settings-header">
-      <h3>{selectedConversation.username} Conversation Settings</h3>
+      <h3>Conversation Settings</h3>
 
       <button id="settings-button" onClick={handleClick}>
         Close

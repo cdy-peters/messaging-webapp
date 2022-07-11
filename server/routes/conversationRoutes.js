@@ -82,6 +82,30 @@ router.post("/update_conversation_name", (req, res) => {
     });
 });
 
+router.post("/leave_conversation", (req, res) => {
+  const { conversationId, userId } = req.body;
+
+  Conversations.findOne({ _id: conversationId })
+    .then((conversation) => {
+      const recipient = conversation.recipients.find(
+        (recipient) => recipient.userId.toString() === userId
+      );
+      conversation.recipients.pull(recipient);
+
+      conversation
+        .save()
+        .then((conversation) => {
+          res.json(conversation);
+        })
+        .catch((err) => {
+          res.json(err);
+        });
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
 router.post("/get_users", (req, res) => {
   const { userId, search, conversations } = req.body;
 

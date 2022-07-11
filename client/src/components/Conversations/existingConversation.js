@@ -14,9 +14,17 @@ const ExistingConversations = (props) => {
   } = props;
 
   const handleClick = (e) => {
+    var name;
+
+    if (e.currentTarget.dataset.name) {
+      name = e.currentTarget.dataset.name;
+    } else {
+      name = "All users left";
+    }
+
     setSelectedConversation({
       conversationId: e.currentTarget.dataset.id,
-      name: e.currentTarget.dataset.name,
+      name: name,
     });
 
     const index = conversations.findIndex(
@@ -89,12 +97,16 @@ const ExistingConversations = (props) => {
       const usernames = conversation.recipients.map((recipient) => {
         return recipient.username;
       });
-      return usernames.join(", ");
+      if (usernames.length > 0) {
+        return usernames.join(", ");
+      } else {
+        return "All users left";
+      }
     }
   };
 
   const messagePreview = (conversation) => {
-    if (conversation.recipients.length === 1) {
+    if (conversation.recipients.length <= 1) {
       return (
         <p className="message-preview">{conversation.lastMessage.message}</p>
       );
@@ -158,8 +170,7 @@ const ExistingConversations = (props) => {
             <button
               id="conversation-button"
               data-id={conversation._id}
-              data-username={conversation.recipients[0].username}
-              data-name={conversation.name}
+              data-name={conversationName(conversation)}
               onClick={handleClick}
             >
               {renderConversations(conversation)}
