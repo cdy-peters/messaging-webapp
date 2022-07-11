@@ -13,11 +13,11 @@ const Messages = (props) => {
     setMessages,
     setShowSettings,
   } = props;
-  const { conversationId, username } = props.selectedConversation;
+  const { conversationId, name } = props.selectedConversation;
 
   return (
     <div>
-      <MessagesHeader username={username} setShowSettings={setShowSettings} />
+      <MessagesHeader name={name} setShowSettings={setShowSettings} />
 
       <MessageHistory
         socket={socket}

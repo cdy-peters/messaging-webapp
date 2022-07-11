@@ -104,6 +104,7 @@ const Conversations = (props) => {
               selectedConversation={selectedConversation}
               conversations={conversations}
               setConversations={setConversations}
+              setSelectedConversation={setSelectedConversation}
             />
           )}
         </div>

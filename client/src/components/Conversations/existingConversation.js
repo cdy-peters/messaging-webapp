@@ -16,7 +16,7 @@ const ExistingConversations = (props) => {
   const handleClick = (e) => {
     setSelectedConversation({
       conversationId: e.currentTarget.dataset.id,
-      username: e.currentTarget.dataset.username,
+      name: e.currentTarget.dataset.name,
     });
 
     const index = conversations.findIndex(
@@ -82,11 +82,15 @@ const ExistingConversations = (props) => {
     });
   }, [socket]);
 
-  const renderUsernames = (conversation) => {
-    const usernames = conversation.recipients.map((recipient) => {
-      return recipient.username;
-    });
-    return usernames.join(", ");
+  const conversationName = (conversation) => {
+    if (conversation.name) {
+      return conversation.name;
+    } else {
+      const usernames = conversation.recipients.map((recipient) => {
+        return recipient.username;
+      });
+      return usernames.join(", ");
+    }
   };
 
   const messagePreview = (conversation) => {
@@ -107,7 +111,7 @@ const ExistingConversations = (props) => {
     return (
       <div>
         <span>
-          {renderUsernames(conversation)}
+          {conversationName(conversation)}
 
           <p style={{ float: "right", margin: 0 }}>
             {moment(conversation.updatedAt).fromNow()}
@@ -155,6 +159,7 @@ const ExistingConversations = (props) => {
               id="conversation-button"
               data-id={conversation._id}
               data-username={conversation.recipients[0].username}
+              data-name={conversation.name}
               onClick={handleClick}
             >
               {renderConversations(conversation)}

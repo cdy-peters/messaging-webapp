@@ -26,7 +26,7 @@ const NewConversations = (props) => {
       .then((data) => {
         setSelectedConversation({
           conversationId: data._id,
-          username: e.target.innerText,
+          name: e.target.innerText,
         });
       });
   };

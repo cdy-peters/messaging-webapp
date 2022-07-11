@@ -2,6 +2,7 @@ import React from "react";
 
 import SettingsHeader from "./settingsHeader";
 import SettingsUsers from "./settingsUsers";
+import SettingsName from "./settingsName";
 
 const Settings = (props) => {
   const {
@@ -9,6 +10,7 @@ const Settings = (props) => {
     selectedConversation,
     conversations,
     setConversations,
+    setSelectedConversation,
   } = props;
 
   return (
@@ -20,6 +22,13 @@ const Settings = (props) => {
 
       <SettingsUsers
         selectedConversation={selectedConversation}
+        conversations={conversations}
+        setConversations={setConversations}
+      />
+
+      <SettingsName
+        selectedConversation={selectedConversation}
+        setSelectedConversation={setSelectedConversation}
         conversations={conversations}
         setConversations={setConversations}
       />

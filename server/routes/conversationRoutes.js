@@ -31,6 +31,7 @@ router.post("/get_conversations", (req, res) => {
           conversation.messages[conversation.messages.length - 1];
         return {
           _id: conversation._id,
+          name: conversation.name,
           recipients: filteredRecipients,
           lastMessage,
           updatedAt: conversation.updatedAt,
@@ -63,6 +64,18 @@ router.post("/read_conversation", (req, res) => {
         .catch((err) => {
           res.json(err);
         });
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+router.post("/update_conversation_name", (req, res) => {
+  const { conversationId, name } = req.body;
+
+  Conversations.findOneAndUpdate({ _id: conversationId }, { name })
+    .then((conversation) => {
+      res.json(conversation);
     })
     .catch((err) => {
       res.json(err);
