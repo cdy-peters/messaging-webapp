@@ -5,6 +5,7 @@ import Search from "./search";
 import ExistingConversation from "./existingConversation";
 import NewConversation from "./newConversation";
 import Messages from "../Messages/messages";
+import Settings from "../Settings/settings";
 
 const URL = "RemovedIP";
 var selectChat;
@@ -16,6 +17,7 @@ const Conversations = (props) => {
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [showSettings, setShowSettings] = useState(false);
 
   try {
     selectChat = selectedConversation.conversationId;
@@ -23,8 +25,7 @@ const Conversations = (props) => {
     selectChat = null;
   }
 
-
-    useEffect(() => {
+  useEffect(() => {
     socket.on("message", (data) => {
       var read = false;
 
@@ -85,7 +86,7 @@ const Conversations = (props) => {
         </div>
 
         <div className="col-8" id="messages">
-          {selectedConversation && (
+          {selectedConversation && !showSettings && (
             <Messages
               socket={socket}
               conversations={conversations}
@@ -93,6 +94,16 @@ const Conversations = (props) => {
               selectedConversation={selectedConversation}
               messages={messages}
               setMessages={setMessages}
+              setShowSettings={setShowSettings}
+            />
+          )}
+
+          {showSettings && (
+            <Settings
+              setShowSettings={setShowSettings}
+              selectedConversation={selectedConversation}
+              conversations={conversations}
+              setConversations={setConversations}
             />
           )}
         </div>

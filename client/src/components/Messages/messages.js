@@ -5,12 +5,19 @@ import MessageHistory from "./messageHistory";
 import MessageField from "./messageField";
 
 const Messages = (props) => {
-  const { socket, conversations, setConversations, messages, setMessages } = props;
+  const {
+    socket,
+    conversations,
+    setConversations,
+    messages,
+    setMessages,
+    setShowSettings,
+  } = props;
   const { conversationId, username } = props.selectedConversation;
 
   return (
     <div>
-      <MessagesHeader username={username} />
+      <MessagesHeader username={username} setShowSettings={setShowSettings} />
 
       <MessageHistory
         socket={socket}

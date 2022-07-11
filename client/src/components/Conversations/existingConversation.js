@@ -82,33 +82,49 @@ const ExistingConversations = (props) => {
     });
   }, [socket]);
 
-  const conversationDetails = (conversation) => {
-    if (conversation.read) {
+  const renderUsernames = (conversation) => {
+    const usernames = conversation.recipients.map((recipient) => {
+      return recipient.username;
+    });
+    return usernames.join(", ");
+  };
+
+  const messagePreview = (conversation) => {
+    if (conversation.recipients.length === 1) {
       return (
-        <div>
-          <span>
-            {conversation.recipients[0].username}
-            <p style={{ float: "right", margin: 0 }}>
-              {moment(conversation.updatedAt).fromNow()}
-            </p>
-          </span>
-          <p className="message-preview">{conversation.lastMessage.message}</p>
-        </div>
+        <p className="message-preview">{conversation.lastMessage.message}</p>
       );
     } else {
       return (
+        <p className="message-preview">
+          {conversation.lastMessage.sender}: {conversation.lastMessage.message}
+        </p>
+      );
+    }
+  };
+
+  const conversationDetails = (conversation) => {
+    return (
+      <div>
+        <span>
+          {renderUsernames(conversation)}
+
+          <p style={{ float: "right", margin: 0 }}>
+            {moment(conversation.updatedAt).fromNow()}
+          </p>
+        </span>
+        {messagePreview(conversation)}
+      </div>
+    );
+  };
+
+  const renderConversations = (conversation) => {
+    if (conversation.read) {
+      return conversationDetails(conversation);
+    } else {
+      return (
         <div>
-          <b>
-            <span>
-              {conversation.recipients[0].username}
-              <p style={{ float: "right", margin: 0 }}>
-                {moment(conversation.updatedAt).fromNow()}
-              </p>
-            </span>
-            <p className="message-preview">
-              {conversation.lastMessage.message}
-            </p>
-          </b>
+          <b>{conversationDetails(conversation)}</b>
         </div>
       );
     }
@@ -141,7 +157,7 @@ const ExistingConversations = (props) => {
               data-username={conversation.recipients[0].username}
               onClick={handleClick}
             >
-              {conversationDetails(conversation)}
+              {renderConversations(conversation)}
             </button>
           </div>
         ))}

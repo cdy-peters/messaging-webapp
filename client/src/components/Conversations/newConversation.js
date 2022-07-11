@@ -7,6 +7,10 @@ const NewConversations = (props) => {
 
   const { conversations, setSelectedConversation, search } = props;
 
+  const individualConversations = conversations.filter(
+    (conversation) => conversation.recipients.length === 1
+  );
+
   const handleClick = (e) => {
     fetch(URL + "new_conversation", {
       method: "POST",
@@ -44,7 +48,7 @@ const NewConversations = (props) => {
 
         if (data.length > 0) {
           if (
-            conversations.some((conversation) =>
+            individualConversations.some((conversation) =>
               conversation.recipients.some(
                 (recipient) => recipient.username === search
               )

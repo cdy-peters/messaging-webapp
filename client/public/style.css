@@ -93,6 +93,7 @@
 #messages-header {
   padding: 0.5rem;
   background-color: #bababa;
+  display: flex;
 }
 
 .messages-sender {
@@ -168,4 +169,15 @@
 
 #messages-form button:hover {
   background-color: rgb(170, 170, 170);
+}
+
+/* Settings */
+#settings {
+  background-color: #e8e8e8;
+}
+
+#settings-header {
+  padding: 0.5rem;
+  background-color: #bababa;
+  display: flex;
 }

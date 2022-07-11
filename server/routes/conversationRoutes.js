@@ -183,4 +183,34 @@ router.post("/send_message", (req, res) => {
   });
 });
 
+router.post("/add_user", (req, res) => {
+  const { userId, conversationId, recipientId, recipientUsername } = req.body;
+
+  Conversations.findOne({ _id: conversationId }, (err, conversation) => {
+    if (err) throw err;
+
+    const recipients = conversation.recipients;
+    const newRecipient = {
+      userId: recipientId,
+      username: recipientUsername,
+      read: false,
+    };
+
+    recipients.push(newRecipient);
+
+    conversation
+      .save()
+      .then((conversation) => {
+        const newRecipients = conversation.recipients.filter(
+          (recipient) => recipient.userId.toString() !== userId
+        );
+
+        res.json(newRecipients);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+});
+
 module.exports = router;

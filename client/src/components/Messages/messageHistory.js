@@ -4,11 +4,11 @@ import moment from "moment";
 const URL = "RemovedIP";
 
 const MessageHistory = (props) => {
-  const {
-    messages,
-    setMessages,
-    conversationId,
-  } = props;
+  const { messages, setMessages, conversationId, conversations } = props;
+
+  const conversation = conversations.find(
+    (conversation) => conversation._id === conversationId
+  );
 
   useEffect(() => {
     async function getMessages() {
@@ -29,12 +29,14 @@ const MessageHistory = (props) => {
   }, [conversationId]);
 
   var prevTime;
+  var prevSender;
 
   const renderMessage = (message) => {
     const time = moment(message.date).fromNow();
 
     if (!prevTime || prevTime !== time) {
       prevTime = time;
+      prevSender = null;
       if (message.sender === localStorage.getItem("username")) {
         return (
           <div key={message._id} className="message-sent">
@@ -45,14 +47,30 @@ const MessageHistory = (props) => {
           </div>
         );
       } else {
-        return (
-          <div key={message._id} className="message-received">
-            <p className="messages-time">
-              <span>{time}</span>
-            </p>
-            <p className="messages-message">{message.message}</p>
-          </div>
-        );
+        if (
+          (!prevSender || prevSender !== message.sender) &&
+          conversation.recipients.length > 1
+        ) {
+          prevSender = message.sender;
+          return (
+            <div key={message._id} className="message-received">
+              <p className="messages-time">
+                <span>{time}</span>
+              </p>
+              <p className="messages-sender">{message.sender}</p>
+              <p className="messages-message">{message.message}</p>
+            </div>
+          );
+        } else {
+          return (
+            <div key={message._id} className="message-received">
+              <p className="messages-time">
+                <span>{time}</span>
+              </p>
+              <p className="messages-message">{message.message}</p>
+            </div>
+          );
+        }
       }
     } else {
       if (message.sender === localStorage.getItem("username")) {
@@ -62,11 +80,24 @@ const MessageHistory = (props) => {
           </div>
         );
       } else {
-        return (
-          <div key={message._id} className="message-received">
-            <p className="messages-message">{message.message}</p>
-          </div>
-        );
+        if (
+          (!prevSender || prevSender !== message.sender) &&
+          conversation.recipients.length > 1
+        ) {
+          prevSender = message.sender;
+          return (
+            <div key={message._id} className="message-received">
+              <p className="messages-sender">{message.sender}</p>
+              <p className="messages-message">{message.message}</p>
+            </div>
+          );
+        } else {
+          return (
+            <div key={message._id} className="message-received">
+              <p className="messages-message">{message.message}</p>
+            </div>
+          );
+        }
       }
     }
   };
