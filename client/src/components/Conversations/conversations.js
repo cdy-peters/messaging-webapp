@@ -27,7 +27,7 @@ const Conversations = (props) => {
   }
 
   useEffect(() => {
-    socket.on("message", (data) => {
+    socket.on("new_message", (data) => {
       var read = false;
 
       if (data.conversationId === selectChat) {
@@ -45,7 +45,7 @@ const Conversations = (props) => {
           }),
         });
       }
-      // TODO: Redo the returned json from /send_message to be alike /get_messages
+
       setConversations((conversations) => {
         const newConversations = [...conversations];
         const index = newConversations.findIndex(
@@ -60,6 +60,139 @@ const Conversations = (props) => {
         newConversations[index].read = read;
         return newConversations;
       });
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on("update_conversation_name", (data) => {
+      setConversations((conversations) => {
+        const newConversations = [...conversations];
+        const index = newConversations.findIndex(
+          (conversation) => conversation._id === data.conversationId
+        );
+        newConversations[index].name = data.name;
+        return newConversations;
+      });
+
+      setSelectedConversation((selectedConversation) => {
+        const newSelectedConversation = { ...selectedConversation };
+        if (newSelectedConversation.conversationId === data.conversationId) {
+          newSelectedConversation.name = data.name;
+        }
+        return newSelectedConversation;
+      });
+
+      setNotifications((notifications) => [
+        ...notifications,
+        data.notification,
+      ]);
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on("add_user", (data) => {
+      setConversations((conversations) => {
+        const newConversations = [...conversations];
+        const index = newConversations.findIndex(
+          (conversation) => conversation._id === data.conversationId
+        );
+        newConversations[index].recipients.push(data.newRecipient);
+        return newConversations;
+      });
+
+      setNotifications((notifications) => [
+        ...notifications,
+        data.notification,
+      ]);
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on("remove_user", (data) => {
+      if (data.removedRecipient === localStorage.getItem("token")) {
+        setConversations((conversations) => {
+          const newConversations = [...conversations];
+          const index = newConversations.findIndex(
+            (conversation) => conversation._id === data.conversationId
+          );
+          newConversations.splice(index, 1);
+          return newConversations;
+        });
+
+        setSelectedConversation(null);
+      } else {
+        setConversations((conversations) => {
+          const newConversations = [...conversations];
+          const index = newConversations.findIndex(
+            (conversation) => conversation._id === data.conversationId
+          );
+          newConversations[index].recipients = newConversations[
+            index
+          ].recipients.filter(
+            (recipient) => recipient.userId !== data.removedRecipient
+          );
+          return newConversations;
+        });
+
+        setNotifications((notifications) => [
+          ...notifications,
+          data.notification,
+        ]);
+      }
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on("user_left", (data) => {
+      setConversations((conversations) => {
+        const newConversations = [...conversations];
+        const index = newConversations.findIndex(
+          (conversation) => conversation._id === data.conversationId
+        );
+        newConversations[index].recipients = newConversations[
+          index
+        ].recipients.filter((recipient) => recipient.userId !== data.leftUser);
+        return newConversations;
+      });
+
+      setNotifications((notifications) => [
+        ...notifications,
+        data.notification,
+      ]);
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on("owner_updated", (data) => {
+      setConversations((conversations) => {
+        const newConversations = [...conversations];
+        const index = newConversations.findIndex(
+          (conversation) => conversation._id === data.conversationId
+        );
+
+        const newRecipients = newConversations[index].recipients.map(
+          (recipient) => {
+            if (recipient.userId === data.newOwner) {
+              recipient.role = "owner";
+            } else {
+              recipient.role = "user";
+            }
+            return recipient;
+          }
+        );
+
+        newConversations[index].recipients = newRecipients;
+        if (data.newOwner === localStorage.getItem("token")) {
+          newConversations[index].role = "owner";
+        }
+
+        return newConversations;
+      });
+
+      setNotifications((notifications) => [
+        ...notifications,
+        data.notification,
+      ]);
     });
   }, [socket]);
 
@@ -111,6 +244,7 @@ const Conversations = (props) => {
               conversations={conversations}
               setConversations={setConversations}
               setSelectedConversation={setSelectedConversation}
+              socket={socket}
             />
           )}
         </div>

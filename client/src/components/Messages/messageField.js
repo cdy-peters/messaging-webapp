@@ -34,6 +34,7 @@ const MessageField = (props) => {
             (conversation) => conversation._id === props.conversationId
           )
         ) {
+          console.log("new mess");
           socket.emit("new_message", data);
 
           const newConversations = [...conversations];
@@ -61,7 +62,7 @@ const MessageField = (props) => {
             read: true,
           };
           setConversations([...conversations, filteredData]);
-
+          console.log("new conv");
           socket.emit("new_conversation", filteredData);
         }
         setMessages([...messages, data.message]);

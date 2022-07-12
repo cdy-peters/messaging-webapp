@@ -8,6 +8,7 @@ const SettingsName = (props) => {
     setSelectedConversation,
     conversations,
     setConversations,
+    socket,
   } = props;
   const [newName, setNewName] = useState("");
 
@@ -15,11 +16,11 @@ const SettingsName = (props) => {
     setNewName(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (newName !== selectedConversation.name) {
-      fetch(URL + "update_conversation_name", {
+      const response = await fetch(URL + "update_conversation_name", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,6 +31,7 @@ const SettingsName = (props) => {
           username: localStorage.getItem("username"),
         }),
       });
+      const newNotification = await response.json();
 
       setSelectedConversation({
         ...selectedConversation,
@@ -39,6 +41,13 @@ const SettingsName = (props) => {
       const newConversations = [...conversations];
       newConversations.forEach((conversation) => {
         if (conversation._id === selectedConversation.conversationId) {
+          socket.emit("update_conversation_name", {
+            conversationId: selectedConversation.conversationId,
+            name: newName,
+            recipients: conversation.recipients,
+            notification: newNotification,
+          });
+
           conversation.name = newName;
         }
       });

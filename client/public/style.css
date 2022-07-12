@@ -171,6 +171,11 @@
   background-color: rgb(170, 170, 170);
 }
 
+#notifications-dropdown {
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
 /* Settings */
 #settings {
   background-color: #e8e8e8;

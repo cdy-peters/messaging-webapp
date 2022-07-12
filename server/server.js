@@ -40,6 +40,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("new_conversation", (conversation) => {
+    console.log(conversation);
     const recipients = conversation.recipients;
 
     recipients.forEach((recipient) => {
@@ -54,7 +55,73 @@ io.on("connection", (socket) => {
     recipients.forEach((recipient) => {
       if (recipient.userId === message.senderId) return;
 
-      socket.in(recipient.userId).emit("message", message);
+      socket.in(recipient.userId).emit("new_message", message);
+    });
+  });
+
+  socket.on("update_conversation_name", (data) => {
+    const recipients = data.recipients;
+
+    recipients.forEach((recipient) => {
+      socket.in(recipient.userId).emit("update_conversation_name", {
+        conversationId: data.conversationId,
+        name: data.name,
+        notification: data.notification,
+      });
+    });
+  });
+
+  socket.on("add_user", (data) => {
+    const recipients = data.recipients;
+
+    recipients.forEach((recipient) => {
+      socket.in(recipient.userId).emit("add_user", {
+        conversationId: data.conversationId,
+        newRecipient: data.newRecipient,
+        notification: data.notification,
+      });
+    });
+  });
+
+  socket.on("remove_user", (data) => {
+    const recipients = data.recipients;
+
+    recipients.forEach((recipient) => {
+      socket.in(recipient.userId).emit("remove_user", {
+        conversationId: data.conversationId,
+        removedRecipient: data.removedRecipient,
+        notification: data.notification,
+      });
+    });
+
+    socket.in(data.removedRecipient).emit("remove_user", {
+      conversationId: data.conversationId,
+      removedRecipient: data.removedRecipient,
+    });
+  });
+
+  socket.on("user_left", (data) => {
+    const recipients = data.recipients;
+
+    recipients.forEach((recipient) => {
+      socket.in(recipient.userId).emit("user_left", {
+        conversationId: data.conversationId,
+        leftUser: data.leftUser,
+        notification: data.notification,
+      });
+    });
+  });
+
+  socket.on("owner_updated", (data) => {
+    const recipients = data.recipients;
+
+    recipients.forEach((recipient) => {
+      socket.in(recipient.userId).emit("owner_updated", {
+        conversationId: data.conversationId,
+        oldOwner: data.oldOwner,
+        newOwner: data.newOwner,
+        notification: data.notification,
+      });
     });
   });
 

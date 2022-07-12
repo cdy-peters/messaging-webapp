@@ -9,6 +9,7 @@ const SettingsLeave = (props) => {
     conversations,
     setConversations,
     setShowSettings,
+    socket,
   } = props;
 
   const handleClick = () => {
@@ -26,12 +27,27 @@ const SettingsLeave = (props) => {
     })
       .then((response) => response.json())
       .then((data) => {
+        const leftUser = data.leftUser;
+        const notification = data.notification;
+
+        const recipients = conversations.find(
+          (conversation) =>
+            conversation._id === selectedConversation.conversationId
+        ).recipients;
+
         const newConversations = conversations.filter(
           (conversation) =>
             conversation._id.toString() !==
             selectedConversation.conversationId.toString()
         );
         setConversations(newConversations);
+
+        socket.emit("user_left", {
+          conversationId: selectedConversation.conversationId,
+          leftUser: leftUser,
+          notification: notification,
+          recipients: recipients,
+        });
 
         setSelectedConversation(null);
         setShowSettings(false);

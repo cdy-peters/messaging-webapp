@@ -12,6 +12,7 @@ const Settings = (props) => {
     conversations,
     setConversations,
     setSelectedConversation,
+    socket,
   } = props;
 
   return (
@@ -23,12 +24,14 @@ const Settings = (props) => {
         setSelectedConversation={setSelectedConversation}
         conversations={conversations}
         setConversations={setConversations}
+        socket={socket}
       />
 
       <SettingsUsers
         selectedConversation={selectedConversation}
         conversations={conversations}
         setConversations={setConversations}
+        socket={socket}
       />
 
       <SettingsLeave
@@ -37,6 +40,7 @@ const Settings = (props) => {
         conversations={conversations}
         setConversations={setConversations}
         setShowSettings={setShowSettings}
+        socket={socket}
       />
     </div>
   );

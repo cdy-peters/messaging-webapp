@@ -3,7 +3,12 @@ import React, { useState, useEffect } from "react";
 const URL = "RemovedIP";
 
 const SettingsUsers = (props) => {
-  const { selectedConversation, conversations, setConversations } = props;
+  const {
+    selectedConversation,
+    conversations,
+    setConversations,
+    socket,
+  } = props;
   const [addUserSearch, setAddUserSearch] = useState("");
   const [addUsers, setAddUsers] = useState([]);
 
@@ -56,6 +61,19 @@ const SettingsUsers = (props) => {
           }
         });
         setConversations(newConversations);
+
+        const recipients = newConversations.find(
+          (conversation) =>
+            conversation._id === selectedConversation.conversationId
+        ).recipients;
+
+        socket.emit("owner_updated", {
+          conversationId: selectedConversation.conversationId,
+          oldOwner: localStorage.getItem("token"),
+          newOwner: e.target.value,
+          recipients: recipients,
+          notification: data.notification,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -78,14 +96,24 @@ const SettingsUsers = (props) => {
     })
       .then((res) => res.json())
       .then((data) => {
+        const newRecipient = data.newRecipient;
+        const notification = data.notification;
+
         setAddUsers([]);
         setAddUserSearch("");
 
         const newConversations = conversations.map((conversation) => {
           if (conversation._id === selectedConversation.conversationId) {
+            socket.emit("add_user", {
+              conversationId: selectedConversation.conversationId,
+              recipients: [...conversation.recipients, newRecipient],
+              newRecipient,
+              notification,
+            });
+
             return {
               ...conversation,
-              recipients: data,
+              recipients: [...conversation.recipients, newRecipient],
             };
           }
           return conversation;
@@ -114,11 +142,20 @@ const SettingsUsers = (props) => {
     })
       .then((res) => res.json())
       .then((data) => {
+        const newRecipients = data.newRecipients;
+
         const newConversations = conversations.map((conversation) => {
           if (conversation._id === selectedConversation.conversationId) {
+            socket.emit("remove_user", {
+              conversationId: selectedConversation.conversationId,
+              recipients: newRecipients,
+              removedRecipient: data.removedRecipient,
+              notification: data.notification,
+            });
+
             return {
               ...conversation,
-              recipients: data,
+              recipients: newRecipients,
             };
           }
           return conversation;

@@ -87,7 +87,9 @@ router.post("/update_conversation_name", (req, res) => {
       conversation
         .save()
         .then((conversation) => {
-          res.json(conversation);
+          res.json(
+            conversation.notifications[conversation.notifications.length - 1]
+          );
         })
         .catch((err) => {
           res.json(err);
@@ -117,7 +119,10 @@ router.post("/leave_conversation", (req, res) => {
       conversation
         .save()
         .then((conversation) => {
-          res.json(conversation);
+          const notification =
+            conversation.notifications[conversation.notifications.length - 1];
+
+          res.json({ leftUser: userId, notification });
         })
         .catch((err) => {
           res.json(err);
@@ -305,7 +310,9 @@ router.post("/update_owner", (req, res) => {
     conversation
       .save()
       .then((conversation) => {
-        res.json(conversation);
+        const notification =
+          conversation.notifications[conversation.notifications.length - 1];
+        res.json({ notification });
       })
       .catch((err) => {
         res.json(err);
@@ -337,11 +344,13 @@ router.post("/add_user", (req, res) => {
     conversation
       .save()
       .then((conversation) => {
-        const newRecipients = conversation.recipients.filter(
-          (recipient) => recipient.userId.toString() !== userId
+        const newRecipient = conversation.recipients.find(
+          (recipient) => recipient.userId.toString() === recipientId
         );
+        const notification =
+          conversation.notifications[conversation.notifications.length - 1];
 
-        res.json(newRecipients);
+        res.json({ newRecipient, notification });
       })
       .catch((err) => {
         res.json(err);
@@ -374,8 +383,14 @@ router.post("/remove_user", (req, res) => {
         const newRecipients = conversation.recipients.filter(
           (recipient) => recipient.userId.toString() !== userId
         );
+        const notification =
+          conversation.notifications[conversation.notifications.length - 1];
 
-        res.json(newRecipients);
+        res.json({
+          newRecipients,
+          removedRecipient: recipientId,
+          notification,
+        });
       })
       .catch((err) => {
         res.json(err);

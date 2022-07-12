@@ -25,7 +25,7 @@ const MessageNotifications = (props) => {
           <FontAwesomeIcon icon={faBell} />
         </Dropdown.Toggle>
 
-        <Dropdown.Menu>
+        <Dropdown.Menu id="notifications-dropdown">
           {notifications.map((notification) => {
             return (
               <div key={notification._id}>
