@@ -73,6 +73,7 @@ const Conversations = (props) => {
 
           <NewConversation
             conversations={conversations}
+            setConversations={setConversations}
             setSelectedConversation={setSelectedConversation}
             search={search}
             setShowSettings={setShowSettings}

@@ -7,6 +7,7 @@ const NewConversations = (props) => {
 
   const {
     conversations,
+    setConversations,
     setSelectedConversation,
     search,
     setShowSettings,
@@ -35,6 +36,10 @@ const NewConversations = (props) => {
           conversationId: data._id,
           name: e.target.innerText,
         });
+
+        const newConversations = [...conversations];
+        newConversations.push(data);
+        setConversations(newConversations);
       });
   };
 

@@ -193,7 +193,26 @@ router.post("/new_conversation", (req, res) => {
     newConversation.save((err, conversation) => {
       if (err) throw err;
 
-      res.json(conversation);
+      const currentUser = conversation.recipients.find(
+        (recipient) => recipient.userId.toString() === userId
+      );
+      const filteredRecipients = conversation.recipients.filter(
+        (recipient) => recipient.userId.toString() !== userId
+      );
+
+      res.json({
+        _id: conversation._id,
+        name: conversation.name,
+        recipients: filteredRecipients,
+        lastMessage: {
+          message: "",
+          sender: "",
+          createdAt: "",
+        },
+        updatedAt: conversation.updatedAt,
+        read: currentUser.read,
+        role: currentUser.role,
+      });
     });
   });
 });
