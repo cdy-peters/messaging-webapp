@@ -11,6 +11,7 @@ const ExistingConversations = (props) => {
     setSelectedConversation,
     search,
     socket,
+    setShowSettings,
   } = props;
 
   const handleClick = (e) => {
@@ -21,6 +22,8 @@ const ExistingConversations = (props) => {
     } else {
       name = "All users left";
     }
+
+    setShowSettings(false);
 
     setSelectedConversation({
       conversationId: e.currentTarget.dataset.id,

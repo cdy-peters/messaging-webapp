@@ -1,11 +1,14 @@
 import React from "react";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 
-const MessagesHeader = (props) => {
-  const { name } = props;
+import MessageNotifications from "./messageNotifications";
 
-  const handleClick = (e) => {
+const MessagesHeader = (props) => {
+  const { name, notifications } = props;
+
+  const handleSettings = (e) => {
     e.preventDefault();
     props.setShowSettings(true);
   };
@@ -14,7 +17,9 @@ const MessagesHeader = (props) => {
     <div id="messages-header">
       <h3>{name}</h3>
 
-      <button id="settings-button" onClick={handleClick}>
+      <MessageNotifications notifications={notifications} />
+
+      <button id="settings-button" onClick={handleSettings}>
         <FontAwesomeIcon icon={faCog} />
       </button>
     </div>

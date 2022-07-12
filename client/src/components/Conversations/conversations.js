@@ -18,6 +18,7 @@ const Conversations = (props) => {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [messages, setMessages] = useState([]);
   const [showSettings, setShowSettings] = useState(false);
+  const [notifications, setNotifications] = useState([]);
 
   try {
     selectChat = selectedConversation.conversationId;
@@ -74,6 +75,7 @@ const Conversations = (props) => {
             conversations={conversations}
             setSelectedConversation={setSelectedConversation}
             search={search}
+            setShowSettings={setShowSettings}
           />
 
           <ExistingConversation
@@ -82,6 +84,7 @@ const Conversations = (props) => {
             setConversations={setConversations}
             setSelectedConversation={setSelectedConversation}
             search={search}
+            setShowSettings={setShowSettings}
           />
         </div>
 
@@ -95,6 +98,8 @@ const Conversations = (props) => {
               messages={messages}
               setMessages={setMessages}
               setShowSettings={setShowSettings}
+              notifications={notifications}
+              setNotifications={setNotifications}
             />
           )}
 

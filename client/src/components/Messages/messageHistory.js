@@ -4,7 +4,13 @@ import moment from "moment";
 const URL = "RemovedIP";
 
 const MessageHistory = (props) => {
-  const { messages, setMessages, conversationId, conversations } = props;
+  const {
+    messages,
+    setMessages,
+    conversationId,
+    conversations,
+    setNotifications,
+  } = props;
 
   const conversation = conversations.find(
     (conversation) => conversation._id === conversationId
@@ -23,7 +29,8 @@ const MessageHistory = (props) => {
       });
       const data = await response.json();
 
-      setMessages(data);
+      setMessages(data.messages);
+      setNotifications(data.notifications);
     }
     getMessages();
   }, [conversationId]);

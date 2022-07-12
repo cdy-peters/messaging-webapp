@@ -5,7 +5,12 @@ const URL = "RemovedIP";
 const NewConversations = (props) => {
   const [users, setUsers] = useState([]);
 
-  const { conversations, setSelectedConversation, search } = props;
+  const {
+    conversations,
+    setSelectedConversation,
+    search,
+    setShowSettings,
+  } = props;
 
   const individualConversations = conversations.filter(
     (conversation) => conversation.recipients.length === 1
@@ -24,6 +29,8 @@ const NewConversations = (props) => {
     })
       .then((res) => res.json())
       .then((data) => {
+        setShowSettings(false);
+
         setSelectedConversation({
           conversationId: data._id,
           name: e.target.innerText,

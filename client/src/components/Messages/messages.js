@@ -12,12 +12,18 @@ const Messages = (props) => {
     messages,
     setMessages,
     setShowSettings,
+    notifications,
+    setNotifications,
   } = props;
   const { conversationId, name } = props.selectedConversation;
 
   return (
     <div>
-      <MessagesHeader name={name} setShowSettings={setShowSettings} />
+      <MessagesHeader
+        name={name}
+        setShowSettings={setShowSettings}
+        notifications={notifications}
+      />
 
       <MessageHistory
         socket={socket}
@@ -26,6 +32,7 @@ const Messages = (props) => {
         conversationId={conversationId}
         setConversations={setConversations}
         conversations={conversations}
+        setNotifications={setNotifications}
       />
       <MessageField
         socket={socket}

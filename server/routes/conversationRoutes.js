@@ -72,11 +72,26 @@ router.post("/read_conversation", (req, res) => {
 });
 
 router.post("/update_conversation_name", (req, res) => {
-  const { conversationId, name } = req.body;
+  const { conversationId, name, username } = req.body;
 
-  Conversations.findOneAndUpdate({ _id: conversationId }, { name })
+  Conversations.findOne({ _id: conversationId })
     .then((conversation) => {
-      res.json(conversation);
+      conversation.name = name;
+
+      const notifications = conversation.notifications;
+      const newNotification = {
+        message: `${username} changed the conversation name to ${name}`,
+      };
+      notifications.push(newNotification);
+
+      conversation
+        .save()
+        .then((conversation) => {
+          res.json(conversation);
+        })
+        .catch((err) => {
+          res.json(err);
+        });
     })
     .catch((err) => {
       res.json(err);
@@ -84,7 +99,7 @@ router.post("/update_conversation_name", (req, res) => {
 });
 
 router.post("/leave_conversation", (req, res) => {
-  const { conversationId, userId } = req.body;
+  const { conversationId, userId, username } = req.body;
 
   Conversations.findOne({ _id: conversationId })
     .then((conversation) => {
@@ -92,6 +107,12 @@ router.post("/leave_conversation", (req, res) => {
         (recipient) => recipient.userId.toString() === userId
       );
       conversation.recipients.pull(recipient);
+
+      const notifications = conversation.notifications;
+      const newNotification = {
+        message: `${username} left`,
+      };
+      notifications.push(newNotification);
 
       conversation
         .save()
@@ -131,8 +152,9 @@ router.post("/get_messages", (req, res) => {
     if (err) throw err;
 
     const messages = conversation.messages;
+    const notifications = conversation.notifications;
 
-    res.json(messages);
+    res.json({ messages, notifications });
   });
 });
 
@@ -161,6 +183,11 @@ router.post("/new_conversation", (req, res) => {
     const newConversation = new Conversations({
       recipients: recipients,
       messages: [],
+      notifications: [
+        {
+          message: `${users[0].username} started a conversation with ${users[1].username}`,
+        },
+      ],
     });
 
     newConversation.save((err, conversation) => {
@@ -223,7 +250,8 @@ router.post("/send_message", (req, res) => {
 });
 
 router.post("/update_owner", (req, res) => {
-  const { userId, conversationId, recipientId } = req.body;
+  const { userId, username, conversationId, recipientId, recipientUsername } =
+    req.body;
 
   Conversations.findOne({ _id: conversationId }, (err, conversation) => {
     if (err) throw err;
@@ -247,8 +275,13 @@ router.post("/update_owner", (req, res) => {
         return recipient;
       }
     });
-
     conversation.recipients = recipients;
+
+    const notifications = conversation.notifications;
+    const newNotification = {
+      message: `${username} made ${recipientUsername} owner`,
+    };
+    notifications.push(newNotification);
 
     conversation
       .save()
@@ -262,7 +295,8 @@ router.post("/update_owner", (req, res) => {
 });
 
 router.post("/add_user", (req, res) => {
-  const { userId, conversationId, recipientId, recipientUsername } = req.body;
+  const { userId, username, conversationId, recipientId, recipientUsername } =
+    req.body;
 
   Conversations.findOne({ _id: conversationId }, (err, conversation) => {
     if (err) throw err;
@@ -273,8 +307,13 @@ router.post("/add_user", (req, res) => {
       username: recipientUsername,
       read: false,
     };
-
     recipients.push(newRecipient);
+
+    const notifications = conversation.notifications;
+    const newNotification = {
+      message: `${username} added ${recipientUsername}`,
+    };
+    notifications.push(newNotification);
 
     conversation
       .save()
@@ -292,7 +331,8 @@ router.post("/add_user", (req, res) => {
 });
 
 router.post("/remove_user", (req, res) => {
-  const { userId, conversationId, recipientId } = req.body;
+  const { userId, username, conversationId, recipientId, recipientUsername } =
+    req.body;
 
   Conversations.findOne({ _id: conversationId }, (err, conversation) => {
     if (err) throw err;
@@ -301,8 +341,13 @@ router.post("/remove_user", (req, res) => {
     const newRecipients = recipients.filter(
       (recipient) => recipient.userId.toString() !== recipientId
     );
-
     conversation.recipients = newRecipients;
+
+    const notifications = conversation.notifications;
+    const newNotification = {
+      message: `${username} removed ${recipientUsername}`,
+    };
+    notifications.push(newNotification);
 
     conversation
       .save()

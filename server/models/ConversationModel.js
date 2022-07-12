@@ -21,6 +21,12 @@ const conversationSchema = new mongoose.Schema(
         date: { type: Date, default: Date.now },
       },
     ],
+    notifications: [
+      {
+        message: { type: String },
+        date: { type: Date, default: Date.now },
+      },
+    ],
   },
   {
     timestamps: true,

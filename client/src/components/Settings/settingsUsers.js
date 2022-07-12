@@ -23,8 +23,10 @@ const SettingsUsers = (props) => {
       },
       body: JSON.stringify({
         userId: localStorage.getItem("token"),
+        username: localStorage.getItem("username"),
         conversationId: selectedConversation.conversationId,
         recipientId: e.target.value,
+        recipientUsername: e.target.dataset.username,
       }),
     })
       .then((res) => res.json())
@@ -68,6 +70,7 @@ const SettingsUsers = (props) => {
       },
       body: JSON.stringify({
         userId: localStorage.getItem("token"),
+        username: localStorage.getItem("username"),
         conversationId: selectedConversation.conversationId,
         recipientId: e.currentTarget.dataset.id,
         recipientUsername: e.currentTarget.dataset.username,
@@ -103,8 +106,10 @@ const SettingsUsers = (props) => {
       },
       body: JSON.stringify({
         userId: localStorage.getItem("token"),
+        username: localStorage.getItem("username"),
         conversationId: selectedConversation.conversationId,
         recipientId: e.target.value,
+        recipientUsername: e.target.dataset.username,
       }),
     })
       .then((res) => res.json())
@@ -164,10 +169,18 @@ const SettingsUsers = (props) => {
       return conversation.recipients.map((user) => (
         <div key={user._id}>
           {user.username}
-          <button value={user.userId} onClick={handleOwner}>
+          <button
+            value={user.userId}
+            data-username={user.username}
+            onClick={handleOwner}
+          >
             Make owner
           </button>
-          <button value={user.userId} onClick={handleRemove}>
+          <button
+            value={user.userId}
+            data-username={user.username}
+            onClick={handleRemove}
+          >
             Remove
           </button>
         </div>

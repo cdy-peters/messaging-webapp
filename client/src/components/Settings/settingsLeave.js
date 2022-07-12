@@ -20,6 +20,7 @@ const SettingsLeave = (props) => {
       },
       body: JSON.stringify({
         userId: localStorage.getItem("token"),
+        username: localStorage.getItem("username"),
         conversationId: selectedConversation.conversationId,
       }),
     })

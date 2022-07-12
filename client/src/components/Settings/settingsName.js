@@ -27,6 +27,7 @@ const SettingsName = (props) => {
         body: JSON.stringify({
           conversationId: selectedConversation.conversationId,
           name: newName,
+          username: localStorage.getItem("username"),
         }),
       });
 
