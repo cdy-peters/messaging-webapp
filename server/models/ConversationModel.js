@@ -10,6 +10,7 @@ const conversationSchema = new mongoose.Schema(
       {
         userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         username: String,
+        role: { type: String, default: "user" },
         read: { type: Boolean, default: false },
       },
     ],

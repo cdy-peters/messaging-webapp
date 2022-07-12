@@ -19,9 +19,9 @@ router.post("/get_conversations", (req, res) => {
   })
     .then((conversations) => {
       const filteredConversations = conversations.map((conversation) => {
-        const read = conversation.recipients.find(
+        const currentUser = conversation.recipients.find(
           (recipient) => recipient.userId.toString() === userId
-        ).read;
+        );
 
         const filteredRecipients = conversation.recipients.filter(
           (recipient) => recipient.userId.toString() !== userId
@@ -35,7 +35,8 @@ router.post("/get_conversations", (req, res) => {
           recipients: filteredRecipients,
           lastMessage,
           updatedAt: conversation.updatedAt,
-          read,
+          read: currentUser.read,
+          role: currentUser.role,
         };
       });
 
@@ -146,6 +147,7 @@ router.post("/new_conversation", (req, res) => {
         return {
           userId: user._id,
           username: user.username,
+          role: "owner",
           read: true,
         };
       } else {
@@ -220,6 +222,45 @@ router.post("/send_message", (req, res) => {
   });
 });
 
+router.post("/update_owner", (req, res) => {
+  const { userId, conversationId, recipientId } = req.body;
+
+  Conversations.findOne({ _id: conversationId }, (err, conversation) => {
+    if (err) throw err;
+
+    const recipients = conversation.recipients.map((recipient) => {
+      if (recipient.userId.toString() === userId) {
+        return {
+          userId: recipient.userId,
+          username: recipient.username,
+          role: "user",
+          read: recipient.read,
+        };
+      } else if (recipient.userId.toString() === recipientId) {
+        return {
+          userId: recipient.userId,
+          username: recipient.username,
+          role: "owner",
+          read: recipient.read,
+        };
+      } else {
+        return recipient;
+      }
+    });
+
+    conversation.recipients = recipients;
+
+    conversation
+      .save()
+      .then((conversation) => {
+        res.json(conversation);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+});
+
 router.post("/add_user", (req, res) => {
   const { userId, conversationId, recipientId, recipientUsername } = req.body;
 
@@ -234,6 +275,34 @@ router.post("/add_user", (req, res) => {
     };
 
     recipients.push(newRecipient);
+
+    conversation
+      .save()
+      .then((conversation) => {
+        const newRecipients = conversation.recipients.filter(
+          (recipient) => recipient.userId.toString() !== userId
+        );
+
+        res.json(newRecipients);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+});
+
+router.post("/remove_user", (req, res) => {
+  const { userId, conversationId, recipientId } = req.body;
+
+  Conversations.findOne({ _id: conversationId }, (err, conversation) => {
+    if (err) throw err;
+
+    const recipients = conversation.recipients;
+    const newRecipients = recipients.filter(
+      (recipient) => recipient.userId.toString() !== recipientId
+    );
+
+    conversation.recipients = newRecipients;
 
     conversation
       .save()
