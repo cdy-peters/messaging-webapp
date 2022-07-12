@@ -40,7 +40,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("new_conversation", (conversation) => {
-    console.log(conversation);
     const recipients = conversation.recipients;
 
     recipients.forEach((recipient) => {
@@ -55,7 +54,11 @@ io.on("connection", (socket) => {
     recipients.forEach((recipient) => {
       if (recipient.userId === message.senderId) return;
 
-      socket.in(recipient.userId).emit("new_message", message);
+      socket.in(recipient.userId).emit("new_message", {
+        conversationId: data.conversationId,
+        message,
+        updatedAt: data.updatedAt,
+      });
     });
   });
 

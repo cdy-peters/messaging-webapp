@@ -7,10 +7,10 @@ const NewConversations = (props) => {
 
   const {
     conversations,
-    setConversations,
     setSelectedConversation,
     search,
     setShowSettings,
+    setMessages,
   } = props;
 
   const individualConversations = conversations.filter(
@@ -18,29 +18,15 @@ const NewConversations = (props) => {
   );
 
   const handleClick = (e) => {
-    fetch(URL + "new_conversation", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: localStorage.getItem("token"),
-        recipientId: e.target.value,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setShowSettings(false);
+    setShowSettings(false);
 
-        setSelectedConversation({
-          conversationId: data._id,
-          name: e.target.innerText,
-        });
+    setMessages([]);
 
-        const newConversations = [...conversations];
-        newConversations.push(data);
-        setConversations(newConversations);
-      });
+    setSelectedConversation({
+      conversationId: null,
+      name: e.target.innerText,
+      recipientId: e.target.dataset.id,
+    });
   };
 
   useEffect(() => {
@@ -97,7 +83,8 @@ const NewConversations = (props) => {
         <button
           id="conversation-button"
           key={user._id}
-          value={user._id}
+          data-id={user._id}
+          data-username={user.username}
           onClick={handleClick}
         >
           {user.username}

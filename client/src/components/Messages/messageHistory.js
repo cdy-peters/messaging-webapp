@@ -17,22 +17,26 @@ const MessageHistory = (props) => {
   );
 
   useEffect(() => {
-    async function getMessages() {
-      const response = await fetch(URL + "get_messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          conversationId: conversationId,
-        }),
-      });
-      const data = await response.json();
+    if (conversation) {
+      async function getMessages() {
+        const response = await fetch(URL + "get_messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            conversationId: conversationId,
+          }),
+        });
+        const data = await response.json();
 
-      setMessages(data.messages);
-      setNotifications(data.notifications);
+        setMessages(data.messages);
+        setNotifications(data.notifications);
+      }
+      getMessages();
+    } else {
+      setMessages([]);
     }
-    getMessages();
   }, [conversationId]);
 
   var prevTime;

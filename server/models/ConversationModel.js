@@ -17,6 +17,7 @@ const conversationSchema = new mongoose.Schema(
     messages: [
       {
         sender: { type: String, ref: "User" },
+        senderId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         message: { type: String },
         date: { type: Date, default: Date.now },
       },

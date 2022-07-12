@@ -164,112 +164,92 @@ router.post("/get_messages", (req, res) => {
 });
 
 router.post("/new_conversation", (req, res) => {
-  const { userId, recipientId } = req.body;
+  const { userId, username, recipientId, recipientUsername, message } =
+    req.body;
 
-  User.find({ _id: { $in: [userId, recipientId] } }, (err, users) => {
-    if (err) throw err;
+  const newConversation = new Conversations({
+    recipients: [
+      {
+        userId: mongoose.Types.ObjectId(userId),
+        username: username,
+        read: true,
+        role: "owner",
+      },
+      {
+        userId: mongoose.Types.ObjectId(recipientId),
+        username: recipientUsername,
+      },
+    ],
+    messages: [
+      {
+        sender: username,
+        senderId: mongoose.Types.ObjectId(userId),
+        message,
+      },
+    ],
+    notifications: [
+      {
+        message: `${username} started a conversation with ${recipientUsername}`,
+      },
+    ],
+  });
 
-    const recipients = users.map((user) => {
-      if (user._id.toString() === userId) {
-        return {
-          userId: user._id,
-          username: user.username,
-          role: "owner",
-          read: true,
-        };
-      } else {
-        return {
-          userId: user._id,
-          username: user.username,
-        };
-      }
-    });
-
-    const newConversation = new Conversations({
-      recipients: recipients,
-      messages: [],
-      notifications: [
-        {
-          message: `${users[0].username} started a conversation with ${users[1].username}`,
-        },
-      ],
-    });
-
-    newConversation.save((err, conversation) => {
-      if (err) throw err;
-
+  newConversation
+    .save()
+    .then((conversation) => {
       const currentUser = conversation.recipients.find(
         (recipient) => recipient.userId.toString() === userId
       );
       const filteredRecipients = conversation.recipients.filter(
         (recipient) => recipient.userId.toString() !== userId
       );
+      const lastMessage =
+        conversation.messages[conversation.messages.length - 1];
 
       res.json({
         _id: conversation._id,
         name: conversation.name,
         recipients: filteredRecipients,
-        lastMessage: {
-          message: "",
-          sender: "",
-          createdAt: "",
-        },
+        lastMessage: lastMessage,
         updatedAt: conversation.updatedAt,
         read: currentUser.read,
         role: currentUser.role,
       });
+    })
+    .catch((err) => {
+      res.json(err);
     });
-  });
 });
 
 router.post("/send_message", (req, res) => {
-  const { conversationId, senderId, senderUser, message } = req.body;
+  const { conversationId, senderId, senderUsername, message } = req.body;
 
-  User.findById(senderId, (err, user) => {
+  Conversations.findOne({ _id: conversationId }, (err, conversation) => {
     if (err) throw err;
 
-    Conversations.findOne({ _id: conversationId }, (err, conversation) => {
-      if (err) throw err;
+    const newMessage = {
+      sender: senderUsername,
+      senderId: mongoose.Types.ObjectId(senderId),
+      message,
+    };
 
-      const recipients = conversation.recipients;
-      const newMessage = {
-        sender: user.username,
-        message: message,
-      };
+    conversation.messages.push(newMessage);
 
-      conversation.messages.push(newMessage);
-
-      recipients.forEach((recipient) => {
-        if (recipient.userId.toString() === senderId) {
-          recipient.read = true;
-        } else {
-          recipient.read = false;
-        }
-      });
-
-      conversation
-        .save()
-        .then((conversation) => {
-          const lastMessageId =
-            conversation.messages[conversation.messages.length - 1]._id;
-
-          res.json({
-            ...conversation._doc,
-            recipients: recipients,
-            message: {
-              conversationId: conversation._id,
-              _id: lastMessageId,
-              senderId: user._id,
-              sender: user.username,
-              message: message,
-              updatedAt: conversation.updatedAt,
-            },
-          });
-        })
-        .catch((err) => {
-          res.json(err);
+    conversation
+      .save()
+      .then((conversation) => {
+        console.log(conversation);
+        const lastMessage =
+          conversation.messages[conversation.messages.length - 1];
+        res.json({
+          lastMessage,
+          conversationId,
+          updatedAt: conversation.updatedAt,
         });
-    });
+      })
+      .catch((err) => {
+        res.json(err);
+      });
   });
 });
 

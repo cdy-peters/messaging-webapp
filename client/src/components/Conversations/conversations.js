@@ -31,7 +31,7 @@ const Conversations = (props) => {
       var read = false;
 
       if (data.conversationId === selectChat) {
-        setMessages((messages) => [...messages, data]);
+        setMessages((messages) => [...messages, data.message]);
         read = true;
 
         fetch(URL + "read_conversation", {
@@ -52,9 +52,9 @@ const Conversations = (props) => {
           (conversation) => conversation._id === data.conversationId
         );
         newConversations[index].lastMessage = {
-          message: data.message,
-          sender: data.sender,
-          _id: data._id,
+          message: data.message.message,
+          sender: data.message.sender,
+          _id: data.message._id,
         };
         newConversations[index].updatedAt = data.updatedAt;
         newConversations[index].read = read;
@@ -210,6 +210,7 @@ const Conversations = (props) => {
             setSelectedConversation={setSelectedConversation}
             search={search}
             setShowSettings={setShowSettings}
+            setMessages={setMessages}
           />
 
           <ExistingConversation
@@ -229,6 +230,7 @@ const Conversations = (props) => {
               conversations={conversations}
               setConversations={setConversations}
               selectedConversation={selectedConversation}
+              setSelectedConversation={setSelectedConversation}
               messages={messages}
               setMessages={setMessages}
               setShowSettings={setShowSettings}

@@ -14,6 +14,8 @@ const Messages = (props) => {
     setShowSettings,
     notifications,
     setNotifications,
+    selectedConversation,
+    setSelectedConversation,
   } = props;
   const { conversationId, name } = props.selectedConversation;
 
@@ -41,6 +43,8 @@ const Messages = (props) => {
         conversationId={conversationId}
         setConversations={setConversations}
         conversations={conversations}
+        selectedConversation={selectedConversation}
+        setSelectedConversation={setSelectedConversation}
       />
     </div>
   );
