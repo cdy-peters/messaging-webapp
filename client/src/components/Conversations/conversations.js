@@ -74,18 +74,20 @@ const Conversations = (props) => {
         return newConversations;
       });
 
-      setSelectedConversation((selectedConversation) => {
-        const newSelectedConversation = { ...selectedConversation };
-        if (newSelectedConversation.conversationId === data.conversationId) {
-          newSelectedConversation.name = data.name;
-        }
-        return newSelectedConversation;
-      });
+      if (data.conversationId === selectChat) {
+        setSelectedConversation((selectedConversation) => {
+          const newSelectedConversation = { ...selectedConversation };
+          if (newSelectedConversation.conversationId === data.conversationId) {
+            newSelectedConversation.name = data.name;
+          }
+          return newSelectedConversation;
+        });
 
-      setNotifications((notifications) => [
-        ...notifications,
-        data.notification,
-      ]);
+        setNotifications((notifications) => [
+          ...notifications,
+          data.notification,
+        ]);
+      }
     });
   }, [socket]);
 
@@ -100,10 +102,12 @@ const Conversations = (props) => {
         return newConversations;
       });
 
-      setNotifications((notifications) => [
-        ...notifications,
-        data.notification,
-      ]);
+      if (data.conversationId === selectChat) {
+        setNotifications((notifications) => [
+          ...notifications,
+          data.notification,
+        ]);
+      }
     });
   }, [socket]);
 
@@ -119,7 +123,9 @@ const Conversations = (props) => {
           return newConversations;
         });
 
-        setSelectedConversation(null);
+        if (data.conversationId === selectChat) {
+          setSelectedConversation(null);
+        }
       } else {
         setConversations((conversations) => {
           const newConversations = [...conversations];
@@ -134,10 +140,12 @@ const Conversations = (props) => {
           return newConversations;
         });
 
-        setNotifications((notifications) => [
-          ...notifications,
-          data.notification,
-        ]);
+        if (data.conversationId === selectChat) {
+          setNotifications((notifications) => [
+            ...notifications,
+            data.notification,
+          ]);
+        }
       }
     });
   }, [socket]);
@@ -155,10 +163,12 @@ const Conversations = (props) => {
         return newConversations;
       });
 
-      setNotifications((notifications) => [
-        ...notifications,
-        data.notification,
-      ]);
+      if (data.conversationId === selectChat) {
+        setNotifications((notifications) => [
+          ...notifications,
+          data.notification,
+        ]);
+      }
     });
   }, [socket]);
 
@@ -189,10 +199,12 @@ const Conversations = (props) => {
         return newConversations;
       });
 
-      setNotifications((notifications) => [
-        ...notifications,
-        data.notification,
-      ]);
+      if (data.conversationId === selectChat) {
+        setNotifications((notifications) => [
+          ...notifications,
+          data.notification,
+        ]);
+      }
     });
   }, [socket]);
 

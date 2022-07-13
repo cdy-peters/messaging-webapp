@@ -6,11 +6,30 @@ import { faCog } from "@fortawesome/free-solid-svg-icons";
 import MessageNotifications from "./messageNotifications";
 
 const MessagesHeader = (props) => {
-  const { selectedConversation, notifications } = props;
+  const { conversations, selectedConversation, notifications } = props;
   var name;
+  console.log(selectedConversation);
 
-  if (selectedConversation.conversationId || selectedConversation.name) {
-    name = selectedConversation.name;
+  if (selectedConversation.conversationId) {
+    const conversation = conversations.find(
+      (conversation) => conversation._id === selectedConversation.conversationId
+    );
+    
+    if (conversation.name) {
+      name = conversation.name;
+    } else {
+      if (conversation.recipients.length === 1) {
+        name = conversation.recipients[0].name;
+      } else if (conversation.recipients.length > 1) {
+        name = conversation.recipients
+          .map((recipient) => {
+            return recipient.username;
+          })
+          .join(", ");
+      } else {
+        name = "All users left";
+      }
+    }
   } else {
     name = selectedConversation.recipients
       .map((recipient) => recipient.username)

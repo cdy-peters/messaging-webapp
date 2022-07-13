@@ -25,6 +25,7 @@ const Messages = (props) => {
         setShowSettings={setShowSettings}
         notifications={notifications}
         selectedConversation={selectedConversation}
+        conversations={conversations}
       />
 
       {!selectedConversation.conversationId && (
