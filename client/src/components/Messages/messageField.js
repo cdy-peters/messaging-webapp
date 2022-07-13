@@ -62,8 +62,8 @@ const MessageField = (props) => {
         body: JSON.stringify({
           userId: localStorage.getItem("token"),
           username: localStorage.getItem("username"),
-          recipientId: selectedConversation.recipientId,
-          recipientUsername: selectedConversation.name,
+          name: selectedConversation.name,
+          recipients: selectedConversation.recipients,
           message: newMessage,
         }),
       })

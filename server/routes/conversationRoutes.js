@@ -164,10 +164,10 @@ router.post("/get_messages", (req, res) => {
 });
 
 router.post("/new_conversation", (req, res) => {
-  const { userId, username, recipientId, recipientUsername, message } =
-    req.body;
+  const { userId, username, name, recipients, message } = req.body;
 
   const newConversation = new Conversations({
+    name,
     recipients: [
       {
         userId: mongoose.Types.ObjectId(userId),
@@ -175,10 +175,7 @@ router.post("/new_conversation", (req, res) => {
         read: true,
         role: "owner",
       },
-      {
-        userId: mongoose.Types.ObjectId(recipientId),
-        username: recipientUsername,
-      },
+      ...recipients,
     ],
     messages: [
       {
@@ -189,7 +186,7 @@ router.post("/new_conversation", (req, res) => {
     ],
     notifications: [
       {
-        message: `${username} started a conversation with ${recipientUsername}`,
+        message: `${username} started the conversation`,
       },
     ],
   });

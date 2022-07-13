@@ -6,7 +6,16 @@ import { faCog } from "@fortawesome/free-solid-svg-icons";
 import MessageNotifications from "./messageNotifications";
 
 const MessagesHeader = (props) => {
-  const { name, notifications } = props;
+  const { selectedConversation, notifications } = props;
+  var name;
+
+  if (selectedConversation.conversationId || selectedConversation.name) {
+    name = selectedConversation.name;
+  } else {
+    name = selectedConversation.recipients
+      .map((recipient) => recipient.username)
+      .join(", ");
+  }
 
   const handleSettings = (e) => {
     e.preventDefault();

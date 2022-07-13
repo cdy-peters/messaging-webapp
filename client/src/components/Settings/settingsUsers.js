@@ -5,6 +5,7 @@ const URL = "RemovedIP";
 const SettingsUsers = (props) => {
   const {
     selectedConversation,
+    setSelectedConversation,
     conversations,
     setConversations,
     socket,
@@ -81,93 +82,119 @@ const SettingsUsers = (props) => {
   };
 
   const handleAdd = (e) => {
-    fetch(URL + "add_user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: localStorage.getItem("token"),
-        username: localStorage.getItem("username"),
-        conversationId: selectedConversation.conversationId,
-        recipientId: e.currentTarget.dataset.id,
-        recipientUsername: e.currentTarget.dataset.username,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const newRecipient = data.newRecipient;
-        const notification = data.notification;
-        const new_user_data = data.new_user_data;
-
-        setAddUsers([]);
-        setAddUserSearch("");
-
-        const newConversations = conversations.map((conversation) => {
-          if (conversation._id === selectedConversation.conversationId) {
-            socket.emit("add_user", {
-              conversationId: selectedConversation.conversationId,
-              recipients: [...conversation.recipients, newRecipient],
-              newRecipient,
-              notification,
-              new_user_data,
-            });
-
-            return {
-              ...conversation,
-              recipients: [...conversation.recipients, newRecipient],
-            };
-          }
-          return conversation;
-        });
-
-        setConversations(newConversations);
+    if (selectedConversation.conversationId) {
+      fetch(URL + "add_user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: localStorage.getItem("token"),
+          username: localStorage.getItem("username"),
+          conversationId: selectedConversation.conversationId,
+          recipientId: e.currentTarget.dataset.id,
+          recipientUsername: e.currentTarget.dataset.username,
+        }),
       })
-      .catch((err) => {
-        console.log(err);
+        .then((res) => res.json())
+        .then((data) => {
+          const newRecipient = data.newRecipient;
+          const notification = data.notification;
+          const new_user_data = data.new_user_data;
+
+          setAddUsers([]);
+          setAddUserSearch("");
+
+          const newConversations = conversations.map((conversation) => {
+            if (conversation._id === selectedConversation.conversationId) {
+              socket.emit("add_user", {
+                conversationId: selectedConversation.conversationId,
+                recipients: [...conversation.recipients, newRecipient],
+                newRecipient,
+                notification,
+                new_user_data,
+              });
+
+              return {
+                ...conversation,
+                recipients: [...conversation.recipients, newRecipient],
+              };
+            }
+            return conversation;
+          });
+
+          setConversations(newConversations);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      const newRecipient = {
+        username: e.currentTarget.dataset.username,
+        userId: e.currentTarget.dataset.id,
+      };
+
+      setAddUsers([]);
+      setAddUserSearch("");
+
+      setSelectedConversation({
+        ...selectedConversation,
+        recipients: [...selectedConversation.recipients, newRecipient],
       });
+    }
   };
 
   const handleRemove = (e) => {
-    fetch(URL + "remove_user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: localStorage.getItem("token"),
-        username: localStorage.getItem("username"),
-        conversationId: selectedConversation.conversationId,
-        recipientId: e.target.value,
-        recipientUsername: e.target.dataset.username,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const newRecipients = data.newRecipients;
-
-        const newConversations = conversations.map((conversation) => {
-          if (conversation._id === selectedConversation.conversationId) {
-            socket.emit("remove_user", {
-              conversationId: selectedConversation.conversationId,
-              recipients: newRecipients,
-              removedRecipient: data.removedRecipient,
-              notification: data.notification,
-            });
-
-            return {
-              ...conversation,
-              recipients: newRecipients,
-            };
-          }
-          return conversation;
-        });
-
-        setConversations(newConversations);
+    if (selectedConversation.conversationId) {
+      fetch(URL + "remove_user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: localStorage.getItem("token"),
+          username: localStorage.getItem("username"),
+          conversationId: selectedConversation.conversationId,
+          recipientId: e.target.value,
+          recipientUsername: e.target.dataset.username,
+        }),
       })
-      .catch((err) => {
-        console.log(err);
+        .then((res) => res.json())
+        .then((data) => {
+          const newRecipients = data.newRecipients;
+
+          const newConversations = conversations.map((conversation) => {
+            if (conversation._id === selectedConversation.conversationId) {
+              socket.emit("remove_user", {
+                conversationId: selectedConversation.conversationId,
+                recipients: newRecipients,
+                removedRecipient: data.removedRecipient,
+                notification: data.notification,
+              });
+
+              return {
+                ...conversation,
+                recipients: newRecipients,
+              };
+            }
+            return conversation;
+          });
+
+          setConversations(newConversations);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      const newRecipients = selectedConversation.recipients.filter(
+        (recipient) => recipient.userId !== e.target.value
+      );
+
+      setSelectedConversation({
+        ...selectedConversation,
+        recipients: newRecipients,
       });
+    }
   };
 
   useEffect(() => {
@@ -186,14 +213,26 @@ const SettingsUsers = (props) => {
         const data = await response.json();
 
         if (data.length > 0) {
-          if (
-            conversation.recipients.some(
-              (recipient) => recipient.username === addUserSearch
-            )
-          ) {
-            setAddUsers([]);
+          if (selectedConversation.conversationId) {
+            if (
+              conversation.recipients.some(
+                (recipient) => recipient.username === addUserSearch
+              )
+            ) {
+              setAddUsers([]);
+            } else {
+              setAddUsers(data);
+            }
           } else {
-            setAddUsers(data);
+            if (
+              selectedConversation.recipients.some(
+                (recipient) => recipient.username === addUserSearch
+              )
+            ) {
+              setAddUsers([]);
+            } else {
+              setAddUsers(data);
+            }
           }
         } else {
           setAddUsers([]);
@@ -204,33 +243,55 @@ const SettingsUsers = (props) => {
   }, [addUserSearch]);
 
   const currentUsers = (conversation) => {
-    if (conversation.role === "owner") {
-      return conversation.recipients.map((user) => (
-        <div key={user._id}>
-          {user.username}
-          <button
-            value={user.userId}
-            data-username={user.username}
-            onClick={handleOwner}
-          >
-            Make owner
-          </button>
-          <button
-            value={user.userId}
-            data-username={user.username}
-            onClick={handleRemove}
-          >
-            Remove
-          </button>
-        </div>
-      ));
+    if (conversation) {
+      if (conversation.role === "owner") {
+        return conversation.recipients.map((user) => (
+          <div key={user._id}>
+            {user.username}
+            <button
+              value={user.userId}
+              data-username={user.username}
+              onClick={handleOwner}
+            >
+              Make owner
+            </button>
+            <button
+              value={user.userId}
+              data-username={user.username}
+              onClick={handleRemove}
+            >
+              Remove
+            </button>
+          </div>
+        ));
+      } else {
+        return conversation.recipients.map((user) => (
+          <div key={user._id}>
+            {user.username}
+            {user.role === "owner" && <span> (owner)</span>}
+          </div>
+        ));
+      }
     } else {
-      return conversation.recipients.map((user) => (
-        <div key={user._id}>
-          {user.username}
-          {user.role === "owner" && <span> (owner)</span>}
-        </div>
-      ));
+      if (selectedConversation.recipients.length === 1) {
+        return selectedConversation.recipients.map((user) => (
+          <div key={user.userId}>
+            {user.username}
+            <button value={user.userId} onClick={handleRemove} disabled>
+              Remove
+            </button>
+          </div>
+        ));
+      } else {
+        return selectedConversation.recipients.map((user) => (
+          <div key={user.userId}>
+            {user.username}
+            <button value={user.userId} onClick={handleRemove}>
+              Remove
+            </button>
+          </div>
+        ));
+      }
     }
   };
 

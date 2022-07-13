@@ -17,15 +17,21 @@ const Messages = (props) => {
     selectedConversation,
     setSelectedConversation,
   } = props;
-  const { conversationId, name } = props.selectedConversation;
+  const { conversationId } = props.selectedConversation;
 
   return (
     <div>
       <MessagesHeader
-        name={name}
         setShowSettings={setShowSettings}
         notifications={notifications}
+        selectedConversation={selectedConversation}
       />
+
+      {!selectedConversation.conversationId && (
+        <div id="new-conversation-alert">
+          Conversation will not be started until you send a message
+        </div>
+      )}
 
       <MessageHistory
         socket={socket}

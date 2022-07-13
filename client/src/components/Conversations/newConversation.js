@@ -24,8 +24,13 @@ const NewConversations = (props) => {
 
     setSelectedConversation({
       conversationId: null,
-      name: e.target.innerText,
-      recipientId: e.target.dataset.id,
+      name: "",
+      recipients: [
+        {
+          username: e.target.innerText,
+          userId: e.target.dataset.id,
+        },
+      ],
     });
   };
 

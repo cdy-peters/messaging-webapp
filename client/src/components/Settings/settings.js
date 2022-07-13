@@ -29,19 +29,22 @@ const Settings = (props) => {
 
       <SettingsUsers
         selectedConversation={selectedConversation}
+        setSelectedConversation={setSelectedConversation}
         conversations={conversations}
         setConversations={setConversations}
         socket={socket}
       />
 
-      <SettingsLeave
-        selectedConversation={selectedConversation}
-        setSelectedConversation={setSelectedConversation}
-        conversations={conversations}
-        setConversations={setConversations}
-        setShowSettings={setShowSettings}
-        socket={socket}
-      />
+      {selectedConversation.conversationId && (
+        <SettingsLeave
+          selectedConversation={selectedConversation}
+          setSelectedConversation={setSelectedConversation}
+          conversations={conversations}
+          setConversations={setConversations}
+          setShowSettings={setShowSettings}
+          socket={socket}
+        />
+      )}
     </div>
   );
 };

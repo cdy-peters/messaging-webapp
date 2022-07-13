@@ -19,7 +19,10 @@ const SettingsName = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (newName !== selectedConversation.name) {
+    if (
+      newName !== selectedConversation.name &&
+      selectedConversation.conversationId
+    ) {
       const response = await fetch(URL + "update_conversation_name", {
         method: "POST",
         headers: {
@@ -52,9 +55,13 @@ const SettingsName = (props) => {
         }
       });
       setConversations(newConversations);
-
-      setNewName("");
+    } else {
+      setSelectedConversation({
+        ...selectedConversation,
+        name: newName,
+      });
     }
+    setNewName("");
   };
 
   return (
