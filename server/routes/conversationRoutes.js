@@ -133,6 +133,18 @@ router.post("/leave_conversation", (req, res) => {
     });
 });
 
+router.post("/delete_conversation", (req, res) => {
+  const { conversationId } = req.body;
+
+  Conversations.findOneAndDelete({ _id: conversationId })
+    .then((conversation) => {
+      res.json(conversation);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
 router.post("/get_users", (req, res) => {
   const { userId, search, conversations } = req.body;
 

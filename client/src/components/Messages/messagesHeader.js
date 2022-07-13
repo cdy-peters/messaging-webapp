@@ -8,13 +8,12 @@ import MessageNotifications from "./messageNotifications";
 const MessagesHeader = (props) => {
   const { conversations, selectedConversation, notifications } = props;
   var name;
-  console.log(selectedConversation);
 
   if (selectedConversation.conversationId) {
     const conversation = conversations.find(
       (conversation) => conversation._id === selectedConversation.conversationId
     );
-    
+
     if (conversation.name) {
       name = conversation.name;
     } else {
