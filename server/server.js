@@ -43,7 +43,24 @@ io.on("connection", (socket) => {
     const recipients = conversation.recipients;
 
     recipients.forEach((recipient) => {
-      socket.in(recipient.userId).emit("new_conversation", conversation);
+      const currentUser = recipients.find(
+        (user) => user.userId === recipient.userId
+      );
+      const filteredRecipients = recipients.filter(
+        (user) => user.userId !== recipient.userId
+      );
+
+      const user_data = {
+        _id: conversation._id,
+        name: conversation.name,
+        recipients: filteredRecipients,
+        lastMessage: conversation.lastMessage,
+        updatedAt: conversation.updatedAt,
+        read: currentUser.read,
+        role: currentUser.role,
+      };
+
+      socket.in(recipient.userId).emit("new_conversation", user_data);
     });
   });
 

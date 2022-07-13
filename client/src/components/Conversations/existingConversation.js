@@ -89,7 +89,8 @@ const ExistingConversations = (props) => {
 
   useEffect(() => {
     socket.on("new_conversation", (data) => {
-      setConversations([...conversations, data]);
+      console.log(data);
+      setConversations((conversations) => [...conversations, data]);
     });
   }, [socket]);
 

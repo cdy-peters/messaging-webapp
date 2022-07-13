@@ -206,7 +206,15 @@ router.post("/new_conversation", (req, res) => {
       const lastMessage =
         conversation.messages[conversation.messages.length - 1];
 
-      res.json({
+      const socket_data = {
+        _id: conversation._id,
+        name: conversation.name,
+        recipients: conversation.recipients,
+        lastMessage,
+        updatedAt: conversation.updatedAt,
+      };
+
+      const user_data = {
         _id: conversation._id,
         name: conversation.name,
         recipients: filteredRecipients,
@@ -214,7 +222,9 @@ router.post("/new_conversation", (req, res) => {
         updatedAt: conversation.updatedAt,
         read: currentUser.read,
         role: currentUser.role,
-      });
+      };
+
+      res.json({ socket_data: socket_data, user_data: user_data });
     })
     .catch((err) => {
       res.json(err);

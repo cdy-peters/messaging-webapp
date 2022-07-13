@@ -47,9 +47,7 @@ const MessageField = (props) => {
             }
             return conversation;
           });
-          console.log(conversations);
-          console.log(newConversations);
-          console.log(data);
+
           setConversations(newConversations);
           setMessages([...messages, data.lastMessage]);
           setNewMessage("");
@@ -71,71 +69,20 @@ const MessageField = (props) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          socket.emit("new_conversation", data);
+          const socket_data = data.socket_data;
+          const user_data = data.user_data;
 
-          setConversations([...conversations, data]);
+          socket.emit("new_conversation", socket_data);
+
+          setConversations([...conversations, user_data]);
           setSelectedConversation({
-            conversationId: data._id,
+            conversationId: user_data._id,
             name: selectedConversation.name,
           });
-          setMessages([...messages, data.lastMessage]);
+          setMessages([...messages, user_data.lastMessage]);
           setNewMessage("");
         });
     }
-
-    // fetch(URL + "send_message", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     conversationId: props.conversationId,
-    //     senderId: localStorage.getItem("token"),
-    //     senderUser: localStorage.getItem("username"),
-    //     message: newMessage,
-    //   }),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     if (
-    //       conversations.find(
-    //         (conversation) => conversation._id === props.conversationId
-    //       )
-    //     ) {
-
-    //       socket.emit("new_message", data);
-
-    //       const newConversations = [...conversations];
-    //       const index = newConversations.findIndex(
-    //         (conversation) => conversation._id === props.conversationId
-    //       );
-    //       newConversations[index].lastMessage = {
-    //         message: newMessage,
-    //         sender: localStorage.getItem("username"),
-    //         _id: data._id,
-    //       };
-    //       newConversations[index].updatedAt = data.updatedAt;
-    //       newConversations[index].read = true;
-    //       setConversations(newConversations);
-    //     } else {
-    //       const userId = localStorage.getItem("token");
-    //       const filteredRecipients = data.recipients.filter(
-    //         (recipient) => recipient.userId.toString() !== userId
-    //       );
-    //       const filteredData = {
-    //         _id: data._id,
-    //         recipients: filteredRecipients,
-    //         lastMessage: data.message,
-    //         updatedAt: data.updatedAt,
-    //         read: true,
-    //       };
-    //       setConversations([...conversations, filteredData]);
-
-    //       socket.emit("new_conversation", filteredData);
-    //     }
-    //     setMessages([...messages, data.message]);
-    //     setNewMessage("");
-    //   });
   };
 
   return (
