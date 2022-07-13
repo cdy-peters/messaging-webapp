@@ -248,7 +248,6 @@ router.post("/send_message", (req, res) => {
     conversation
       .save()
       .then((conversation) => {
-        console.log(conversation);
         const lastMessage =
           conversation.messages[conversation.messages.length - 1];
         res.json({
@@ -340,7 +339,18 @@ router.post("/add_user", (req, res) => {
         const notification =
           conversation.notifications[conversation.notifications.length - 1];
 
-        res.json({ newRecipient, notification });
+        const filteredRecipients = conversation.recipients.filter(
+          (recipient) => recipient.userId.toString() !== recipientId
+        );
+
+        const new_user_data = {
+          name: conversation.name,
+          recipients: filteredRecipients,
+          lastMessage: conversation.messages[conversation.messages.length - 1],
+          updatedAt: conversation.updatedAt,
+        };
+
+        res.json({ newRecipient, notification, new_user_data });
       })
       .catch((err) => {
         res.json(err);

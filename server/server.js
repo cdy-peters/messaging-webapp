@@ -93,13 +93,24 @@ io.on("connection", (socket) => {
 
   socket.on("add_user", (data) => {
     const recipients = data.recipients;
+    const new_user_data = data.new_user_data;
+
+    new_user_data._id = data.conversationId;
+    new_user_data.read = data.newRecipient.read;
+    new_user_data.role = data.newRecipient.role;
 
     recipients.forEach((recipient) => {
-      socket.in(recipient.userId).emit("add_user", {
-        conversationId: data.conversationId,
-        newRecipient: data.newRecipient,
-        notification: data.notification,
-      });
+      if (recipient.userId === data.newRecipient.userId) {
+        socket
+          .in(recipient.userId)
+          .emit("added_to_conversation", new_user_data);
+      } else {
+        socket.in(recipient.userId).emit("add_user", {
+          conversationId: data.conversationId,
+          newRecipient: data.newRecipient,
+          notification: data.notification,
+        });
+      }
     });
   });
 

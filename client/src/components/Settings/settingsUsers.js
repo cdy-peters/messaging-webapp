@@ -98,6 +98,7 @@ const SettingsUsers = (props) => {
       .then((data) => {
         const newRecipient = data.newRecipient;
         const notification = data.notification;
+        const new_user_data = data.new_user_data;
 
         setAddUsers([]);
         setAddUserSearch("");
@@ -109,6 +110,7 @@ const SettingsUsers = (props) => {
               recipients: [...conversation.recipients, newRecipient],
               newRecipient,
               notification,
+              new_user_data,
             });
 
             return {
