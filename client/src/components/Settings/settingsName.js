@@ -65,15 +65,19 @@ const SettingsName = (props) => {
   };
 
   return (
-    <div className="settings-name">
+    <div className="settings-change-name">
+      <h5>Change conversation name</h5>
       <form onSubmit={handleSubmit}>
         <input
+          id="conversation-name-input"
           type="text"
           value={newName}
           onChange={handleChange}
           placeholder="Conversation name"
         />
-        <button type="submit">Change</button>
+        <button type="submit" id="change-conversation-button">
+          Change
+        </button>
       </form>
     </div>
   );

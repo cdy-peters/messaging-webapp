@@ -15,10 +15,13 @@
 /* Conversations */
 #conversations {
   background-color: #e8e8e8;
+  border-right: 1px solid #ccc;
+  padding: 0;
 }
 
 #conversations-header {
-  padding: 0.5rem;
+  padding: 0.5rem 12px;
+  height: 58px;
 }
 
 #conversations-title {
@@ -38,21 +41,41 @@
   background-color: rgb(170, 170, 170);
 }
 
-#conversation-search {
+#conversations-inner {
+  height: calc(100vh - 58px);
+  overflow-y: scroll;
+}
+
+#conversations-search {
+  padding: 0 12px;
+}
+
+#conversations-search-input {
   border: none;
   padding: 0.5rem;
   width: 100%;
-  border-radius: 7px;
+  background-color: transparent;
+  border-bottom: 1px solid grey;
+  margin-bottom: 12px;
+}
 
-  background-color: #fff;
-  box-shadow: 0 0 0 1px #ccc;
+#conversations-search-input:focus {
+  outline: none;
+  border-bottom: 1px solid #000;
+}
+
+#new-conversations {
+  padding: 0 12px;
+}
+
+#existing-conversations {
+  padding: 0 12px;
 }
 
 .conversations-subtitle {
   font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
-  background-color: rgb(195, 195, 195);
   margin: 0;
 }
 
@@ -86,14 +109,29 @@
 /* Messages */
 #messages {
   background-color: #f8f8f8;
-  max-height: 100vh;
-  overflow-y: scroll;
+  padding: 0;
 }
 
 #messages-header {
   padding: 0.5rem;
-  background-color: #bababa;
+  background-color: #e8e8e8;
   display: flex;
+  justify-content: space-between;
+  height: 58px;
+}
+
+#messages-header-buttons {
+  display: flex;
+}
+
+#messages-content {
+  padding: 0 12px;
+  overflow-y: scroll;
+  height: calc(100vh - 58px);
+}
+
+#message-history {
+  min-height: calc(100vh - 120px);
 }
 
 .messages-sender {
@@ -140,30 +178,28 @@
 
 #messages-form {
   display: flex;
-  flex-direction: row;
-
-  border: 1px solid black;
-  border-radius: 7px;
-  margin-bottom: 5px;
+  margin-bottom: 12px;
 }
 
 #messages-form input {
-  flex-grow: 2;
   border: none;
-  border-radius: 7px;
-  background-color: white;
-  padding: 0.5rem;
+  padding: 0 0.5rem;
+  width: 100%;
+  background-color: transparent;
+  border-bottom: 1px solid grey;
 }
 
 #messages-form input:focus {
   outline: none;
+  border-bottom: 1px solid #000;
 }
 
 #messages-form button {
-  border: none;
-  border-left: 1px solid rgb(136, 136, 136);
-  border-radius: 0 7px 7px 0;
+  float: right;
+  color: #000;
   background-color: rgb(195, 195, 195);
+  border: none;
+  border-radius: 7px;
   padding: 0.5rem;
 }
 
@@ -179,18 +215,168 @@
   margin: 0.5rem 0;
 }
 
+/* Notifications */
+
+#notifications-button {
+  float: right;
+  color: #000;
+  background-color: rgb(195, 195, 195);
+  border: none;
+  border-radius: 7px;
+  padding: 0.5rem;
+  margin-right: 5px;
+  min-width: 40px;
+}
+
+#notifications-button:hover {
+  background-color: rgb(170, 170, 170);
+}
+
+#notifications-button:focus {
+  box-shadow: none;
+}
+
 #notifications-dropdown {
-  max-height: 500px;
+  max-height: 50vh;
   overflow-y: scroll;
+  background-color: #e8e8e8;
+}
+
+.dropdown-toggle::after {
+  display: none !important;
+}
+
+.notification-time {
+  font-size: 0.8rem;
+  color: #575757;
+  margin: 0;
+  text-align: center;
+
+  border-bottom: 1px solid #bababa;
+  line-height: 0.1em;
+  margin: 10px 0;
+}
+
+.notification-time span {
+  background: #e8e8e8;
+  padding: 0 10px;
+}
+
+#notification-text {
+  color: black;
+  font-size: 1rem;
+}
+
+.dropdown-header {
+  padding: 5px 12px !important;
 }
 
 /* Settings */
+#settings-button {
+  float: right;
+
+  background-color: rgb(195, 195, 195);
+  border: none;
+  border-radius: 7px;
+  padding: 0.5rem;
+  min-width: 40px;
+}
+
+#settings-button:hover {
+  background-color: rgb(170, 170, 170);
+}
+
 #settings {
-  background-color: #e8e8e8;
+  background-color: #f8f8f8;
 }
 
 #settings-header {
   padding: 0.5rem;
-  background-color: #bababa;
+  background-color: #e8e8e8;
+  height: 58px;
   display: flex;
+  justify-content: space-between;
+}
+
+#settings-content-outer {
+  height: calc(100vh - 58px);
+  overflow-y: scroll;
+}
+
+#settings-content-inner {
+  max-width: 45%;
+  padding: 0 12px;
+}
+
+.manage-user {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+}
+
+#change-conversation-button {
+  background-color: rgb(195, 195, 195);
+  border: none;
+  border-radius: 7px;
+  padding: 0.3rem;
+  font-size: 0.8rem;
+}
+
+#make-owner-button {
+  background-color: rgb(195, 195, 195);
+  border: none;
+  border-radius: 7px;
+  padding: 0.3rem;
+  font-size: 0.8rem;
+  margin-right: 5px;
+}
+
+#remove-button {
+  background-color: rgb(195, 195, 195);
+  border: none;
+  border-radius: 7px;
+  padding: 0.3rem;
+  font-size: 0.8rem;
+}
+
+#add-button {
+  background-color: rgb(195, 195, 195);
+  border: none;
+  border-radius: 7px;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+#conversation-name-input {
+  border: none;
+  border-bottom: 1px solid grey;
+  background-color: transparent;
+  width: 70%;
+}
+
+#conversation-name-input:focus {
+  outline: none;
+  border-bottom: 1px solid #000;
+}
+
+.settings-change-name form {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+}
+
+#user-search {
+  border: none;
+  border-bottom: 1px solid grey;
+  background-color: transparent;
+  width: 70%;
+}
+
+#add-users {
+  height: 110px;
+}
+
+#user-search:focus {
+  outline: none;
+  border-bottom: 1px solid #000;
 }

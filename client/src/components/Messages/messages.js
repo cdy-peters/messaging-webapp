@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 import MessagesHeader from "./messagesHeader";
 import MessageHistory from "./messageHistory";
@@ -19,6 +19,16 @@ const Messages = (props) => {
   } = props;
   const { conversationId } = props.selectedConversation;
 
+  const messagesBottom = useRef(null);
+
+  const scrollBottom = () => {
+    messagesBottom.current.scrollIntoView();
+  };
+
+  useEffect(() => {
+    scrollBottom();
+  }, [messages]);
+
   return (
     <div>
       <MessagesHeader
@@ -27,32 +37,37 @@ const Messages = (props) => {
         selectedConversation={selectedConversation}
         conversations={conversations}
       />
+      <div id="messages-content">
+        {!selectedConversation.conversationId && (
+          <div id="new-conversation-alert">
+            Conversation will not be started until you send a message
+          </div>
+        )}
 
-      {!selectedConversation.conversationId && (
-        <div id="new-conversation-alert">
-          Conversation will not be started until you send a message
+        <MessageHistory
+          socket={socket}
+          messages={messages}
+          setMessages={setMessages}
+          conversationId={conversationId}
+          setConversations={setConversations}
+          conversations={conversations}
+          setNotifications={setNotifications}
+        />
+        <div>
+          <MessageField
+            socket={socket}
+            messages={messages}
+            setMessages={setMessages}
+            conversationId={conversationId}
+            setConversations={setConversations}
+            conversations={conversations}
+            selectedConversation={selectedConversation}
+            setSelectedConversation={setSelectedConversation}
+          />
         </div>
-      )}
 
-      <MessageHistory
-        socket={socket}
-        messages={messages}
-        setMessages={setMessages}
-        conversationId={conversationId}
-        setConversations={setConversations}
-        conversations={conversations}
-        setNotifications={setNotifications}
-      />
-      <MessageField
-        socket={socket}
-        messages={messages}
-        setMessages={setMessages}
-        conversationId={conversationId}
-        setConversations={setConversations}
-        conversations={conversations}
-        selectedConversation={selectedConversation}
-        setSelectedConversation={setSelectedConversation}
-      />
+        <div ref={messagesBottom}></div>
+      </div>
     </div>
   );
 };

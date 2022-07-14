@@ -44,11 +44,13 @@ const MessagesHeader = (props) => {
     <div id="messages-header">
       <h3>{name}</h3>
 
-      <MessageNotifications notifications={notifications} />
+      <div id="messages-header-buttons">
+        <MessageNotifications notifications={notifications} />
 
-      <button id="settings-button" onClick={handleSettings}>
-        <FontAwesomeIcon icon={faCog} />
-      </button>
+        <button id="settings-button" onClick={handleSettings}>
+          <FontAwesomeIcon icon={faCog} />
+        </button>
+      </div>
     </div>
   );
 };

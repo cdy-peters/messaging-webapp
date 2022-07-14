@@ -1,6 +1,6 @@
 import React from "react";
 
-const Search = (props) => {
+const SearchConversations = (props) => {
   const { search, setSearch } = props;
 
   const handleChange = (e) => {
@@ -8,9 +8,9 @@ const Search = (props) => {
   };
 
   return (
-    <div>
+    <div id="conversations-search">
       <input
-        id="conversation-search"
+        id="conversations-search-input"
         type="text"
         value={search}
         placeholder="Search for conversations"
@@ -20,4 +20,4 @@ const Search = (props) => {
   );
 };
 
-export default Search;
+export default SearchConversations;

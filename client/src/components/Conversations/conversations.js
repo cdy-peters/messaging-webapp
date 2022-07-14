@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import ConversationsHeader from "./conversationsHeader";
-import Search from "./search";
+import SearchConversations from "./searchConversations";
 import ExistingConversation from "./existingConversation";
 import NewConversation from "./newConversation";
 import Messages from "../Messages/messages";
@@ -214,25 +214,27 @@ const Conversations = (props) => {
         <div className="col-4" id="conversations">
           <ConversationsHeader />
 
-          <Search search={search} setSearch={setSearch} />
+          <div id="conversations-inner">
+            <SearchConversations search={search} setSearch={setSearch} />
 
-          <NewConversation
-            conversations={conversations}
-            setConversations={setConversations}
-            setSelectedConversation={setSelectedConversation}
-            search={search}
-            setShowSettings={setShowSettings}
-            setMessages={setMessages}
-          />
+            <NewConversation
+              conversations={conversations}
+              setConversations={setConversations}
+              setSelectedConversation={setSelectedConversation}
+              search={search}
+              setShowSettings={setShowSettings}
+              setMessages={setMessages}
+            />
 
-          <ExistingConversation
-            socket={socket}
-            conversations={conversations}
-            setConversations={setConversations}
-            setSelectedConversation={setSelectedConversation}
-            search={search}
-            setShowSettings={setShowSettings}
-          />
+            <ExistingConversation
+              socket={socket}
+              conversations={conversations}
+              setConversations={setConversations}
+              setSelectedConversation={setSelectedConversation}
+              search={search}
+              setShowSettings={setShowSettings}
+            />
+          </div>
         </div>
 
         <div className="col-8" id="messages">

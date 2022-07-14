@@ -119,7 +119,11 @@ const MessageHistory = (props) => {
     }
   };
 
-  return <div>{messages.map((message) => renderMessage(message))}</div>;
+  return (
+    <div id="message-history">
+      {messages.map((message) => renderMessage(message))}
+    </div>
+  );
 };
 
 export default MessageHistory;

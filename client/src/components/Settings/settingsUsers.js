@@ -246,22 +246,26 @@ const SettingsUsers = (props) => {
     if (conversation) {
       if (conversation.role === "owner") {
         return conversation.recipients.map((user) => (
-          <div key={user._id}>
+          <div key={user._id} className="manage-user">
             {user.username}
-            <button
-              value={user.userId}
-              data-username={user.username}
-              onClick={handleOwner}
-            >
-              Make owner
-            </button>
-            <button
-              value={user.userId}
-              data-username={user.username}
-              onClick={handleRemove}
-            >
-              Remove
-            </button>
+            <div>
+              <button
+                id="make-owner-button"
+                value={user.userId}
+                data-username={user.username}
+                onClick={handleOwner}
+              >
+                Make owner
+              </button>
+              <button
+                id="remove-button"
+                value={user.userId}
+                data-username={user.username}
+                onClick={handleRemove}
+              >
+                Remove
+              </button>
+            </div>
           </div>
         ));
       } else {
@@ -275,18 +279,27 @@ const SettingsUsers = (props) => {
     } else {
       if (selectedConversation.recipients.length === 1) {
         return selectedConversation.recipients.map((user) => (
-          <div key={user.userId}>
+          <div key={user.userId} className="manage-user">
             {user.username}
-            <button value={user.userId} onClick={handleRemove} disabled>
+            <button
+              id="remove-button"
+              value={user.userId}
+              onClick={handleRemove}
+              disabled
+            >
               Remove
             </button>
           </div>
         ));
       } else {
         return selectedConversation.recipients.map((user) => (
-          <div key={user.userId}>
+          <div key={user.userId} className="manage-user">
             {user.username}
-            <button value={user.userId} onClick={handleRemove}>
+            <button
+              id="remove-button"
+              value={user.userId}
+              onClick={handleRemove}
+            >
               Remove
             </button>
           </div>
@@ -298,11 +311,12 @@ const SettingsUsers = (props) => {
   return (
     <div id="settings-users">
       <div id="current-users">
-        <h3>Users</h3>
+        <h5>Manage users</h5>
         {currentUsers(conversation)}
       </div>
-
+      <br></br>
       <div id="add-users">
+        <h5>Add users</h5>
         <form>
           <input
             id="user-search"
@@ -314,9 +328,10 @@ const SettingsUsers = (props) => {
         </form>
 
         {addUsers.map((user) => (
-          <div key={user._id}>
+          <div key={user._id} className="manage-user">
             {user.username}
             <button
+              id="add-button"
               data-id={user._id}
               data-username={user.username}
               onClick={handleAdd}

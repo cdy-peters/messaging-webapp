@@ -72,7 +72,7 @@ const NewConversations = (props) => {
   }, [search, conversations]);
 
   return (
-    <div>
+    <div id="new-conversations">
       {search && (
         <p className="conversations-subtitle">Start a New Conversation</p>
       )}
