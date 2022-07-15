@@ -27,6 +27,10 @@ const MessageField = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (newMessage.trim() === "") {
+      return;
+    }
+
     if (conversationId) {
       fetch(URL + "send_message", {
         method: "POST",
