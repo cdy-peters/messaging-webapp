@@ -9,6 +9,7 @@ const NewConversations = (props) => {
   const { setSelectedConversation, setShowSettings } = useContextProvider();
 
   const [users, setUsers] = useState([]);
+  const [conversationExists, setConversationExists] = useState(false);
 
   const individualConversations = conversations.filter(
     (conversation) => conversation.recipients.length === 1
@@ -32,6 +33,7 @@ const NewConversations = (props) => {
   };
 
   useEffect(() => {
+    setConversationExists(false);
     if (search) {
       async function getUsers() {
         const response = await fetch(URL + "get_users", {
@@ -54,6 +56,7 @@ const NewConversations = (props) => {
               )
             )
           ) {
+            setConversationExists(true);
             setUsers([]);
           } else {
             setUsers(data);
@@ -74,7 +77,11 @@ const NewConversations = (props) => {
         <p className="conversations-subtitle">Start a New Conversation</p>
       )}
 
-      {search && users.length === 0 && (
+      {search && conversationExists && (
+        <p>You already have a conversation with this user</p>
+      )}
+
+      {search && users.length === 0 && !conversationExists && (
         <p>
           User does not exist. <br></br> Make sure you correctly entered their
           full username
