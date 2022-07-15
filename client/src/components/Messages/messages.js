@@ -38,12 +38,6 @@ const Messages = (props) => {
         conversations={conversations}
       />
       <div id="messages-content">
-        {!selectedConversation.conversationId && (
-          <div id="new-conversation-alert">
-            Conversation will not be started until you send a message
-          </div>
-        )}
-
         <MessageHistory
           socket={socket}
           messages={messages}
@@ -52,6 +46,7 @@ const Messages = (props) => {
           setConversations={setConversations}
           conversations={conversations}
           setNotifications={setNotifications}
+          selectedConversation={selectedConversation}
         />
         <div>
           <MessageField

@@ -10,6 +10,7 @@ const MessageHistory = (props) => {
     conversationId,
     conversations,
     setNotifications,
+    selectedConversation,
   } = props;
 
   const conversation = conversations.find(
@@ -51,9 +52,7 @@ const MessageHistory = (props) => {
       if (message.sender === localStorage.getItem("username")) {
         return (
           <div key={message._id} className="message-sent">
-            <p className="messages-time">
-              <span>{time}</span>
-            </p>
+            <p className="messages-time">{time}</p>
             <p className="messages-message">{message.message}</p>
           </div>
         );
@@ -68,9 +67,7 @@ const MessageHistory = (props) => {
           prevSender = message.sender;
           return (
             <div key={message._id} className="message-received">
-              <p className="messages-time">
-                <span>{time}</span>
-              </p>
+              <p className="messages-time">{time}</p>
               <p className="messages-sender">{message.sender}</p>
               <p className="messages-message">{message.message}</p>
             </div>
@@ -78,9 +75,7 @@ const MessageHistory = (props) => {
         } else {
           return (
             <div key={message._id} className="message-received">
-              <p className="messages-time">
-                <span>{time}</span>
-              </p>
+              <p className="messages-time">{time}</p>
               <p className="messages-message">{message.message}</p>
             </div>
           );
@@ -121,6 +116,11 @@ const MessageHistory = (props) => {
 
   return (
     <div id="message-history">
+      {!selectedConversation.conversationId && (
+        <div id="new-conversation-alert">
+          Conversation will not start until you send a message
+        </div>
+      )}
       {messages.map((message) => renderMessage(message))}
     </div>
   );

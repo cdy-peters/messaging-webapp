@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+
 const URL = "RemovedIP";
 
 const MessageField = (props) => {
@@ -93,7 +96,9 @@ const MessageField = (props) => {
         value={newMessage}
         onChange={(e) => setNewMessage(e.target.value)}
       />
-      <button type="submit">Send</button>
+      <button type="submit">
+        <FontAwesomeIcon icon={faPaperPlane} />
+      </button>
     </form>
   );
 };

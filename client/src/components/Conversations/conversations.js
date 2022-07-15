@@ -238,6 +238,8 @@ const Conversations = (props) => {
         </div>
 
         <div className="col-8" id="messages">
+          {!selectedConversation && <div id="messages-placeholder"></div>}
+
           {selectedConversation && !showSettings && (
             <Messages
               socket={socket}

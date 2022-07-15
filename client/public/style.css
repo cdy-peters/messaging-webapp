@@ -24,6 +24,10 @@
 
 #entry-inner {
   width: 300px;
+  height: fit-content;
+  background-color: rgba(255, 255, 255, 0.3);
+  padding: 12px;
+  border-radius: 7px;
 }
 
 #entry-inner h3 {
@@ -36,7 +40,7 @@
 
 #switch-active-tab span {
   cursor: pointer;
-  color: grey;
+  color: #8d8b8b;
 }
 
 #switch-active-tab span:hover {
@@ -51,7 +55,8 @@
   width: 100%;
   height: 30px;
   border: none;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #8d8b8b;
+  background-color: transparent;
 }
 
 .entry-field input:focus {
@@ -61,7 +66,7 @@
 
 #entry-inner button {
   width: 100%;
-  background-color: rgb(195, 195, 195);
+  background-color: #ccc;
   border: none;
   border-radius: 7px;
   padding: 0.5rem;
@@ -70,7 +75,7 @@
 
 /* Conversations */
 #conversations {
-  background-color: #e8e8e8;
+  background-color: rgb(211 209 209 / 70%);
   border-right: 1px solid #ccc;
   padding: 0;
 }
@@ -111,7 +116,7 @@
   padding: 0.5rem;
   width: 100%;
   background-color: transparent;
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid #8d8b8b;
   margin-bottom: 12px;
 }
 
@@ -136,13 +141,13 @@
 }
 
 #conversation-button {
-  background-color: #e8e8e8;
+  background-color: transparent;
   color: #000;
 
   border-left: none;
   border-right: none;
   border-top: none;
-  border-bottom: 1px solid #bababa;
+  border-bottom: 1px solid #8d8b8b;
 
   padding: 0.5rem;
   font-size: 1rem;
@@ -152,7 +157,7 @@
 }
 
 #conversation-button:hover {
-  background-color: #d8d8d8;
+  background-color: rgb(195 195 195 / 78%);
 }
 
 .message-preview {
@@ -164,13 +169,18 @@
 
 /* Messages */
 #messages {
-  background-color: #f8f8f8;
   padding: 0;
+}
+
+#messages-placeholder {
+  background-color: rgb(248 248 248 / 70%);
+  width: 100%;
+  height: 100%;
 }
 
 #messages-header {
   padding: 0.5rem;
-  background-color: #e8e8e8;
+  background-color: rgb(211 209 209 / 70%);
   display: flex;
   justify-content: space-between;
   height: 58px;
@@ -181,6 +191,7 @@
 }
 
 #messages-content {
+  background-color: rgb(248 248 248 / 70%);
   padding: 0 12px;
   overflow-y: scroll;
   height: calc(100vh - 58px);
@@ -199,15 +210,8 @@
   color: #575757;
   margin: 0;
   text-align: center;
-
-  border-bottom: 1px solid #bababa;
-  line-height: 0.1em;
+  background-color: transparent;
   margin: 10px 0;
-}
-
-.messages-time span {
-  background: #f8f8f8;
-  padding: 0 10px;
 }
 
 .messages-message {
@@ -242,7 +246,7 @@
   padding: 0 0.5rem;
   width: 100%;
   background-color: transparent;
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid #8d8b8b;
 }
 
 #messages-form input:focus {
@@ -253,14 +257,14 @@
 #messages-form button {
   float: right;
   color: #000;
-  background-color: rgb(195, 195, 195);
+  background-color: transparent;
   border: none;
   border-radius: 7px;
   padding: 0.5rem;
 }
 
 #messages-form button:hover {
-  background-color: rgb(170, 170, 170);
+  background-color: rgb(195, 195, 195);
 }
 
 #new-conversation-alert {
@@ -295,7 +299,7 @@
 #notifications-dropdown {
   max-height: 50vh;
   overflow-y: scroll;
-  background-color: #e8e8e8;
+  background-color: rgb(232 232 232 / 70%);
 }
 
 .dropdown-toggle::after {
@@ -342,19 +346,16 @@
   background-color: rgb(170, 170, 170);
 }
 
-#settings {
-  background-color: #f8f8f8;
-}
-
 #settings-header {
   padding: 0.5rem;
-  background-color: #e8e8e8;
+  background-color: rgb(211 209 209 / 70%);
   height: 58px;
   display: flex;
   justify-content: space-between;
 }
 
 #settings-content-outer {
+  background-color: rgb(248 248 248 / 70%);
   height: calc(100vh - 58px);
   overflow-y: scroll;
 }
@@ -405,7 +406,7 @@
 
 #conversation-name-input {
   border: none;
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid #8d8b8b;
   background-color: transparent;
   width: 70%;
 }
@@ -423,7 +424,7 @@
 
 #user-search {
   border: none;
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid #8d8b8b;
   background-color: transparent;
   width: 70%;
 }
@@ -435,4 +436,38 @@
 #user-search:focus {
   outline: none;
   border-bottom: 1px solid #000;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+#notifications-dropdown::-webkit-scrollbar {
+  width: 10px;
+}
+
+#notifications-dropdown::-webkit-scrollbar-track {
+  background-color: rgb(232 232 232 / 70%);
+  border-radius: 7px;
+}
+
+#notifications-dropdown::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+#notifications-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
