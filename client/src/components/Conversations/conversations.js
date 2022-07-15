@@ -5,25 +5,25 @@ import ConversationsHeader from "./conversationsHeader";
 import SearchConversations from "./searchConversations";
 import ExistingConversation from "./existingConversation";
 import NewConversation from "./newConversation";
-import Messages from "../Messages/messages";
-import Settings from "../Settings/settings";
 
 const URL = "RemovedIP";
 var selectChat;
 
 const Conversations = (props) => {
-  const { socket } = props;
+  const {
+    socket,
+    conversations,
+    setConversations,
+    setMessages,
+    setNotifications,
+  } = props;
 
   const {
     selectedConversation,
     setSelectedConversation,
-    showSettings,
   } = useContextProvider();
 
   const [search, setSearch] = useState("");
-  const [conversations, setConversations] = useState([]);
-  const [messages, setMessages] = useState([]);
-  const [notifications, setNotifications] = useState([]);
 
   try {
     selectChat = selectedConversation.conversationId;
@@ -214,53 +214,25 @@ const Conversations = (props) => {
   }, [socket]);
 
   return (
-    <div className="container">
-      <div className="row" style={{ height: "100vh" }}>
-        <div className="col-4" id="conversations">
-          <ConversationsHeader />
+    <div>
+      <ConversationsHeader />
 
-          <div id="conversations-inner">
-            <SearchConversations search={search} setSearch={setSearch} />
+      <div id="conversations-inner">
+        <SearchConversations search={search} setSearch={setSearch} />
 
-            <NewConversation
-              conversations={conversations}
-              setConversations={setConversations}
-              search={search}
-              setMessages={setMessages}
-            />
+        <NewConversation
+          conversations={conversations}
+          setConversations={setConversations}
+          search={search}
+          setMessages={setMessages}
+        />
 
-            <ExistingConversation
-              socket={socket}
-              conversations={conversations}
-              setConversations={setConversations}
-              search={search}
-            />
-          </div>
-        </div>
-
-        <div className="col-8" id="messages">
-          {!selectedConversation && <div id="messages-placeholder"></div>}
-
-          {selectedConversation && !showSettings && (
-            <Messages
-              socket={socket}
-              conversations={conversations}
-              setConversations={setConversations}
-              messages={messages}
-              setMessages={setMessages}
-              notifications={notifications}
-              setNotifications={setNotifications}
-            />
-          )}
-
-          {showSettings && (
-            <Settings
-              conversations={conversations}
-              setConversations={setConversations}
-              socket={socket}
-            />
-          )}
-        </div>
+        <ExistingConversation
+          socket={socket}
+          conversations={conversations}
+          setConversations={setConversations}
+          search={search}
+        />
       </div>
     </div>
   );
