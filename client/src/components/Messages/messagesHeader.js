@@ -18,7 +18,7 @@ const MessagesHeader = (props) => {
       name = conversation.name;
     } else {
       if (conversation.recipients.length === 1) {
-        name = conversation.recipients[0].name;
+        name = conversation.recipients[0].username;
       } else if (conversation.recipients.length > 1) {
         name = conversation.recipients
           .map((recipient) => {
