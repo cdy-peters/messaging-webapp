@@ -16,7 +16,12 @@ var selectChat;
 const Home = (props) => {
   const { isMobile } = props;
 
-  const { activeComponent, selectedConversation, setSelectedConversation, showSettings } = useContextProvider();
+  const {
+    activeComponent,
+    selectedConversation,
+    setSelectedConversation,
+    showSettings,
+  } = useContextProvider();
 
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -213,7 +218,7 @@ const Home = (props) => {
   if (!isMobile) {
     return (
       <div className="container">
-        <div className="row" style={{ height: "100vh" }}>
+        <div className="row">
           <div className="col-4" id="conversations">
             <Conversations
               socket={socket}
@@ -254,7 +259,7 @@ const Home = (props) => {
     if (activeComponent === "conversations") {
       return (
         <div className="container">
-          <div className="row" style={{ height: "100vh" }}>
+          <div className="row">
             <div className="col-12" id="conversations">
               <Conversations
                 socket={socket}
@@ -270,7 +275,7 @@ const Home = (props) => {
     } else if (activeComponent === "messages") {
       return (
         <div className="container">
-          <div className="row" style={{ height: "100vh" }}>
+          <div className="row">
             <div className="col-12" id="messages">
               {!selectedConversation && <div id="messages-placeholder"></div>}
 
@@ -301,7 +306,7 @@ const Home = (props) => {
     } else if (activeComponent === "settings") {
       return (
         <div className="container">
-          <div className="row" style={{ height: "100vh" }}>
+          <div className="row">
             <div className="col-12" id="settings">
               <Settings
                 conversations={conversations}

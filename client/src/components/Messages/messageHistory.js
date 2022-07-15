@@ -5,7 +5,13 @@ import { useContextProvider } from "../../utils/context";
 const URL = "RemovedIP";
 
 const MessageHistory = (props) => {
-  const { messages, setMessages, conversations, setNotifications } = props;
+  const {
+    messages,
+    setMessages,
+    conversations,
+    setNotifications,
+    setOnBottom,
+  } = props;
 
   const { selectedConversation } = useContextProvider();
 
@@ -36,6 +42,7 @@ const MessageHistory = (props) => {
     } else {
       setMessages([]);
     }
+    setOnBottom(true);
   }, [conversationId]);
 
   var prevTime;

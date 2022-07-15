@@ -16,6 +16,8 @@ const Messages = (props) => {
     isMobile,
   } = props;
 
+  const [onBottom, setOnBottom] = React.useState(false);
+
   const messagesBottom = useRef(null);
 
   const scrollBottom = () => {
@@ -23,7 +25,10 @@ const Messages = (props) => {
   };
 
   useEffect(() => {
-    scrollBottom();
+    if (onBottom) {
+      scrollBottom();
+      setOnBottom(false);
+    }
   }, [messages]);
 
   return (
@@ -41,6 +46,7 @@ const Messages = (props) => {
           setConversations={setConversations}
           conversations={conversations}
           setNotifications={setNotifications}
+          setOnBottom={setOnBottom}
         />
         <div>
           <MessageField
