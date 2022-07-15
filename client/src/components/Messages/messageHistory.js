@@ -1,17 +1,15 @@
 import React, { useEffect } from "react";
 import moment from "moment";
+import { useContextProvider } from "../../utils/context";
 
 const URL = "RemovedIP";
 
 const MessageHistory = (props) => {
-  const {
-    messages,
-    setMessages,
-    conversationId,
-    conversations,
-    setNotifications,
-    selectedConversation,
-  } = props;
+  const { messages, setMessages, conversations, setNotifications } = props;
+
+  const { selectedConversation } = useContextProvider();
+
+  const conversationId = selectedConversation.conversationId;
 
   const conversation = conversations.find(
     (conversation) => conversation._id === conversationId

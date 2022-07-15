@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import moment from "moment";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 
 const MessageNotifications = (props) => {
   const { notifications } = props;
+
   const [showNotifications, setShowNotifications] = useState(false);
   const notificationsBottom = useRef(null);
+
   var prevTime;
 
   const notificationTime = (notification) => {

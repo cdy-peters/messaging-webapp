@@ -1,4 +1,5 @@
 import React from "react";
+import { useContextProvider } from "../../utils/context";
 
 import SettingsHeader from "./settingsHeader";
 import SettingsName from "./settingsName";
@@ -6,23 +7,16 @@ import SettingsUsers from "./settingsUsers";
 import SettingsLeave from "./settingsLeave";
 
 const Settings = (props) => {
-  const {
-    setShowSettings,
-    selectedConversation,
-    conversations,
-    setConversations,
-    setSelectedConversation,
-    socket,
-  } = props;
+  const { conversations, setConversations, socket } = props;
+
+  const { selectedConversation } = useContextProvider();
 
   return (
     <div id="settings">
-      <SettingsHeader setShowSettings={setShowSettings} />
+      <SettingsHeader />
       <div id="settings-content-outer">
         <div id="settings-content-inner">
           <SettingsName
-            selectedConversation={selectedConversation}
-            setSelectedConversation={setSelectedConversation}
             conversations={conversations}
             setConversations={setConversations}
             socket={socket}
@@ -30,8 +24,6 @@ const Settings = (props) => {
           <br></br>
 
           <SettingsUsers
-            selectedConversation={selectedConversation}
-            setSelectedConversation={setSelectedConversation}
             conversations={conversations}
             setConversations={setConversations}
             socket={socket}
@@ -39,11 +31,8 @@ const Settings = (props) => {
 
           {selectedConversation.conversationId && (
             <SettingsLeave
-              selectedConversation={selectedConversation}
-              setSelectedConversation={setSelectedConversation}
               conversations={conversations}
               setConversations={setConversations}
-              setShowSettings={setShowSettings}
               socket={socket}
             />
           )}

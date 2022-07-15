@@ -1,4 +1,5 @@
 import React from "react";
+import { useContextProvider } from "../../utils/context";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
@@ -6,7 +7,10 @@ import { faCog } from "@fortawesome/free-solid-svg-icons";
 import MessageNotifications from "./messageNotifications";
 
 const MessagesHeader = (props) => {
-  const { conversations, selectedConversation, notifications } = props;
+  const { conversations, notifications } = props;
+
+  const { selectedConversation, setShowSettings } = useContextProvider();
+
   var name;
 
   if (selectedConversation.conversationId) {
@@ -37,7 +41,7 @@ const MessagesHeader = (props) => {
 
   const handleSettings = (e) => {
     e.preventDefault();
-    props.setShowSettings(true);
+    setShowSettings(true);
   };
 
   return (

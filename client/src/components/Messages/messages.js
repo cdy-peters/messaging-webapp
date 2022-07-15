@@ -11,13 +11,9 @@ const Messages = (props) => {
     setConversations,
     messages,
     setMessages,
-    setShowSettings,
     notifications,
     setNotifications,
-    selectedConversation,
-    setSelectedConversation,
   } = props;
-  const { conversationId } = props.selectedConversation;
 
   const messagesBottom = useRef(null);
 
@@ -32,9 +28,7 @@ const Messages = (props) => {
   return (
     <div>
       <MessagesHeader
-        setShowSettings={setShowSettings}
         notifications={notifications}
-        selectedConversation={selectedConversation}
         conversations={conversations}
       />
       <div id="messages-content">
@@ -42,22 +36,17 @@ const Messages = (props) => {
           socket={socket}
           messages={messages}
           setMessages={setMessages}
-          conversationId={conversationId}
           setConversations={setConversations}
           conversations={conversations}
           setNotifications={setNotifications}
-          selectedConversation={selectedConversation}
         />
         <div>
           <MessageField
             socket={socket}
             messages={messages}
             setMessages={setMessages}
-            conversationId={conversationId}
             setConversations={setConversations}
             conversations={conversations}
-            selectedConversation={selectedConversation}
-            setSelectedConversation={setSelectedConversation}
           />
         </div>
 

@@ -1,7 +1,8 @@
 import React from "react";
+import { useContextProvider } from "../../utils/context";
 
 const SettingsHeader = (props) => {
-  const { setShowSettings } = props;
+  const { setShowSettings } = useContextProvider();
 
   const handleClick = (e) => {
     e.preventDefault();

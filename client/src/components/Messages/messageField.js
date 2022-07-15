@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useContextProvider } from "../../utils/context";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
@@ -12,10 +13,15 @@ const MessageField = (props) => {
     setMessages,
     setConversations,
     conversations,
-    conversationId,
+  } = props;
+
+  const {
     selectedConversation,
     setSelectedConversation,
-  } = props;
+  } = useContextProvider();
+
+  const conversationId = selectedConversation.conversationId;
+
   const [newMessage, setNewMessage] = useState("");
 
   const handleSubmit = (e) => {

@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { useContextProvider } from "../../utils/context";
 
 const URL = "RemovedIP";
 
 const SettingsUsers = (props) => {
+  const { conversations, setConversations, socket } = props;
+
   const {
     selectedConversation,
     setSelectedConversation,
-    conversations,
-    setConversations,
-    socket,
-  } = props;
+  } = useContextProvider();
+
   const [addUserSearch, setAddUserSearch] = useState("");
   const [addUsers, setAddUsers] = useState([]);
 

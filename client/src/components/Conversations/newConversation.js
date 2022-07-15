@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useContextProvider } from "../../utils/context";
 
 const URL = "RemovedIP";
 
 const NewConversations = (props) => {
-  const [users, setUsers] = useState([]);
+  const { conversations, search, setMessages } = props;
 
-  const {
-    conversations,
-    setSelectedConversation,
-    search,
-    setShowSettings,
-    setMessages,
-  } = props;
+  const { setSelectedConversation, setShowSettings } = useContextProvider();
+
+  const [users, setUsers] = useState([]);
 
   const individualConversations = conversations.filter(
     (conversation) => conversation.recipients.length === 1

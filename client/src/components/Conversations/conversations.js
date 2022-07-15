@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useContextProvider } from "../../utils/context";
 
 import ConversationsHeader from "./conversationsHeader";
 import SearchConversations from "./searchConversations";
@@ -13,11 +14,15 @@ var selectChat;
 const Conversations = (props) => {
   const { socket } = props;
 
+  const {
+    selectedConversation,
+    setSelectedConversation,
+    showSettings,
+  } = useContextProvider();
+
   const [search, setSearch] = useState("");
   const [conversations, setConversations] = useState([]);
-  const [selectedConversation, setSelectedConversation] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [showSettings, setShowSettings] = useState(false);
   const [notifications, setNotifications] = useState([]);
 
   try {
@@ -220,9 +225,7 @@ const Conversations = (props) => {
             <NewConversation
               conversations={conversations}
               setConversations={setConversations}
-              setSelectedConversation={setSelectedConversation}
               search={search}
-              setShowSettings={setShowSettings}
               setMessages={setMessages}
             />
 
@@ -230,9 +233,7 @@ const Conversations = (props) => {
               socket={socket}
               conversations={conversations}
               setConversations={setConversations}
-              setSelectedConversation={setSelectedConversation}
               search={search}
-              setShowSettings={setShowSettings}
             />
           </div>
         </div>
@@ -245,11 +246,8 @@ const Conversations = (props) => {
               socket={socket}
               conversations={conversations}
               setConversations={setConversations}
-              selectedConversation={selectedConversation}
-              setSelectedConversation={setSelectedConversation}
               messages={messages}
               setMessages={setMessages}
-              setShowSettings={setShowSettings}
               notifications={notifications}
               setNotifications={setNotifications}
             />
@@ -257,11 +255,8 @@ const Conversations = (props) => {
 
           {showSettings && (
             <Settings
-              setShowSettings={setShowSettings}
-              selectedConversation={selectedConversation}
               conversations={conversations}
               setConversations={setConversations}
-              setSelectedConversation={setSelectedConversation}
               socket={socket}
             />
           )}

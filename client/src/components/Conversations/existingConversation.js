@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
+import { useContextProvider } from "../../utils/context";
 
 const URL = "RemovedIP";
 
 const ExistingConversations = (props) => {
+  const { conversations, setConversations, search, socket } = props;
+
+  const { setSelectedConversation, setShowSettings } = useContextProvider();
+
   const [filteredConversations, setFilteredConversations] = useState([]);
-  const {
-    conversations,
-    setConversations,
-    setSelectedConversation,
-    search,
-    socket,
-    setShowSettings,
-  } = props;
 
   const handleClick = (e) => {
     var name;
