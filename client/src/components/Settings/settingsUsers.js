@@ -317,15 +317,13 @@ const SettingsUsers = (props) => {
       <br></br>
       <div id="add-users">
         <h5>Add users</h5>
-        <form>
-          <input
-            id="user-search"
-            type="text"
-            value={addUserSearch}
-            placeholder="Search for users"
-            onChange={handleChange}
-          />
-        </form>
+        <input
+          id="user-search"
+          type="text"
+          value={addUserSearch}
+          placeholder="Search for users"
+          onChange={handleChange}
+        />
 
         {addUsers.map((user) => (
           <div key={user._id} className="manage-user">
