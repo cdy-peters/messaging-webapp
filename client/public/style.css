@@ -186,6 +186,21 @@
   height: 58px;
 }
 
+#messages-header-title {
+  display: flex;
+}
+
+#messages-header-back {
+  display: flex;
+  align-items: center;
+  margin: 0 6px;
+}
+
+#messages-header-title h3 {
+  line-height: 1.5;
+  margin: 0;
+}
+
 #messages-header-buttons {
   display: flex;
 }
@@ -261,6 +276,7 @@
   border: none;
   border-radius: 7px;
   padding: 0.5rem;
+  padding-bottom: 0;
 }
 
 #messages-form button:hover {
@@ -332,6 +348,10 @@
 }
 
 /* Settings */
+#settings {
+  padding: 0;
+}
+
 #settings-button {
   float: right;
 
@@ -361,7 +381,7 @@
 }
 
 #settings-content-inner {
-  max-width: 45%;
+  max-width: 320px;
   padding: 0 12px;
 }
 

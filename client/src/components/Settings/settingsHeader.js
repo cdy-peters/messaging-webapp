@@ -2,10 +2,11 @@ import React from "react";
 import { useContextProvider } from "../../utils/context";
 
 const SettingsHeader = (props) => {
-  const { setShowSettings } = useContextProvider();
+  const { setActiveComponent, setShowSettings } = useContextProvider();
 
   const handleClick = (e) => {
     e.preventDefault();
+    setActiveComponent("messages");
     setShowSettings(false);
   };
 

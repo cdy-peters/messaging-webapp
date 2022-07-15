@@ -102,7 +102,7 @@ const MessageField = (props) => {
         value={newMessage}
         onChange={(e) => setNewMessage(e.target.value)}
       />
-      <button type="submit">
+      <button type="submit" id="message-send-button">
         <FontAwesomeIcon icon={faPaperPlane} />
       </button>
     </form>

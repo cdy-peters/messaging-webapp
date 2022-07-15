@@ -7,7 +7,11 @@ const URL = "RemovedIP";
 const ExistingConversations = (props) => {
   const { conversations, setConversations, search, socket } = props;
 
-  const { setSelectedConversation, setShowSettings } = useContextProvider();
+  const {
+    setActiveComponent,
+    setSelectedConversation,
+    setShowSettings,
+  } = useContextProvider();
 
   const [filteredConversations, setFilteredConversations] = useState([]);
 
@@ -20,6 +24,7 @@ const ExistingConversations = (props) => {
       name = "All users left";
     }
 
+    setActiveComponent("messages");
     setShowSettings(false);
 
     setSelectedConversation({

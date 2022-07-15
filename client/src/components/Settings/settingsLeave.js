@@ -7,6 +7,7 @@ const SettingsLeave = (props) => {
   const { conversations, setConversations, socket } = props;
 
   const {
+    setActiveComponent,
     selectedConversation,
     setSelectedConversation,
     setShowSettings,
@@ -50,6 +51,7 @@ const SettingsLeave = (props) => {
         });
 
         setSelectedConversation(null);
+        setActiveComponent("conversations");
         setShowSettings(false);
       })
       .catch((error) => console.log(error));

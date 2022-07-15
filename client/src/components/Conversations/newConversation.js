@@ -6,7 +6,11 @@ const URL = "RemovedIP";
 const NewConversations = (props) => {
   const { conversations, search, setMessages } = props;
 
-  const { setSelectedConversation, setShowSettings } = useContextProvider();
+  const {
+    setActiveComponent,
+    setSelectedConversation,
+    setShowSettings,
+  } = useContextProvider();
 
   const [users, setUsers] = useState([]);
   const [conversationExists, setConversationExists] = useState(false);
@@ -16,6 +20,7 @@ const NewConversations = (props) => {
   );
 
   const handleClick = (e) => {
+    setActiveComponent("messages");
     setShowSettings(false);
 
     setMessages([]);

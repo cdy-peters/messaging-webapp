@@ -3,13 +3,18 @@ import { useContextProvider } from "../../utils/context";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 import MessageNotifications from "./messageNotifications";
 
 const MessagesHeader = (props) => {
-  const { conversations, notifications } = props;
+  const { conversations, notifications, isMobile } = props;
 
-  const { selectedConversation, setShowSettings } = useContextProvider();
+  const {
+    setActiveComponent,
+    selectedConversation,
+    setShowSettings,
+  } = useContextProvider();
 
   var name;
 
@@ -41,12 +46,25 @@ const MessagesHeader = (props) => {
 
   const handleSettings = (e) => {
     e.preventDefault();
+    setActiveComponent("settings");
     setShowSettings(true);
   };
 
   return (
     <div id="messages-header">
-      <h3>{name}</h3>
+      <div id="messages-header-title">
+        {isMobile && (
+          <div id="messages-header-back">
+            <FontAwesomeIcon
+              icon={faChevronLeft}
+              onClick={() => {
+                setActiveComponent("conversations");
+              }}
+            />
+          </div>
+        )}
+        <h3>{name}</h3>
+      </div>
 
       <div id="messages-header-buttons">
         <MessageNotifications notifications={notifications} />

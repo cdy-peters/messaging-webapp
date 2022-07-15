@@ -13,6 +13,7 @@ const Messages = (props) => {
     setMessages,
     notifications,
     setNotifications,
+    isMobile,
   } = props;
 
   const messagesBottom = useRef(null);
@@ -30,6 +31,7 @@ const Messages = (props) => {
       <MessagesHeader
         notifications={notifications}
         conversations={conversations}
+        isMobile={isMobile}
       />
       <div id="messages-content">
         <MessageHistory
