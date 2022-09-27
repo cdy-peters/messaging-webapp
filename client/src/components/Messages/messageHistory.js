@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import moment from "moment";
 import { useContextProvider } from "../../utils/context";
 
-const URL = "RemovedIP";
+const URL = process.env.REACT_APP_URL;
 
 const MessageHistory = (props) => {
   const {

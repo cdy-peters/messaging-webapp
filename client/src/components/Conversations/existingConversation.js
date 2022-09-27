@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { useContextProvider } from "../../utils/context";
 
-const URL = "RemovedIP";
+const URL = process.env.REACT_APP_URL;
 
 const ExistingConversations = (props) => {
   const { conversations, setConversations, search, socket } = props;

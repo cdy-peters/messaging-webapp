@@ -6,7 +6,7 @@ import Conversations from "./Conversations/conversations";
 import Messages from "./Messages/messages";
 import Settings from "./Settings/settings";
 
-const URL = "RemovedIP";
+const URL = process.env.REACT_APP_URL;
 const socket = io(URL);
 socket.emit("user_connected", {
   userId: localStorage.getItem("token"),

@@ -4,7 +4,7 @@ import { useContextProvider } from "../../utils/context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
-const URL = "RemovedIP";
+const URL = process.env.REACT_APP_URL;
 
 const MessageField = (props) => {
   const {

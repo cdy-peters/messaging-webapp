@@ -1,7 +1,7 @@
 import React from "react";
 import { useContextProvider } from "../../utils/context";
 
-const URL = "RemovedIP";
+const URL = process.env.REACT_APP_URL;
 
 const SettingsLeave = (props) => {
   const { conversations, setConversations, socket } = props;

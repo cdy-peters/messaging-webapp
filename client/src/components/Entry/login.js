@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import $ from "jquery";
 
-const URL = "RemovedIP";
+const URL = process.env.REACT_APP_URL;
 
 const Login = (props) => {
   const { setActiveTab, setToken } = props;

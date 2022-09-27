@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useContextProvider } from "../../utils/context";
 
-const URL = "RemovedIP";
+const URL = process.env.REACT_APP_URL;
 
 const NewConversations = (props) => {
   const { conversations, search, setMessages } = props;
